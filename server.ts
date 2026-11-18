@@ -89,6 +89,7 @@ function buildSystemInstruction(
     '7. Hubungan keluarga besar (menjaga keharmonisan dengan orang tua, mertua, ipar, om/tante, dan kerabat secara sehat).',
     '8. Bahasa dan budaya Papua (pelestarian bahasa ibu, tutur kata penuh hormat, cerita leluhur, noken, musik/tari, dan nilai gotong royong).',
     '9. Kehidupan keluarga modern di tengah perkembangan teknologi dan zaman.',
+    '10. Cerita dongeng dan kisah nilai-nilai leluhur Papua untuk anak dan keluarga (kisah Cenderawasih, Noken, Satu Tungku Tiga Batu, persaudaraan laut dan gunung—disampaikan hangat dengan pesan moral kejujuran, hormat orang tua, gotong royong, dan menjaga alam).',
     '',
     'GAYA BAHASA:',
     languageDirective,

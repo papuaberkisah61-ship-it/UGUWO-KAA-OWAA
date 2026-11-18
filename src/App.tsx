@@ -1,14 +1,29 @@
 import {useEffect, useRef, useState, type FormEvent} from 'react';
 import {
   ArrowRight,
+  Baby,
+  BookHeart,
   BookOpen,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Compass,
   Feather,
+  Fish,
+  Flame,
+  GraduationCap,
   HeartHandshake,
   Home,
   Info,
+  LayoutGrid,
+  Leaf,
   MapPin,
   Menu,
   MessageCircle,
+  MessageSquareText,
+  Quote,
+  SlidersHorizontal,
+  Sprout,
   User,
   Users,
   X,
@@ -19,6 +34,11 @@ import {
   PapuaCarvingCorner,
   PapuaFamilyCrest,
 } from './components/PapuaMotif';
+import {
+  FacebookIcon,
+  InstagramIcon,
+  WhatsAppIcon,
+} from './components/SocialIcons';
 
 type HubCategoryId =
   | 'perkawinan'
@@ -180,11 +200,195 @@ const MINI_ARTICLES = [
   },
 ];
 
+const PARENTING_STAGES = [
+  {
+    stage: 'Usia Balita · 0–5 Tahun',
+    title: 'Akar Kasih & Bahasa Ibu',
+    tip: 'Biasakan tutur kata lembut dan pelukan hangat setiap hari, kenalkan lagu serta kosakata bahasa daerah Papua di rumah, dan penuhi gizi alami dari pangan lokal agar anak tumbuh sehat serta merasa aman.',
+    prompt:
+      'Bagaimana tips parenting Papua mendidik anak usia balita di rumah agar dekat dengan orang tua, sehat, dan mengenal bahasa ibu sejak kecil?',
+    icon: Baby,
+  },
+  {
+    stage: 'Usia Remaja · 12–17 Tahun',
+    title: 'Baku Dengar & Percaya Diri',
+    tip: 'Bangun kebiasaan baku dengar tanpa langsung menghakimi agar remaja berani terbuka. Dampingi pergaulan serta penggunaan HP secara bijak, dan tanamkan kebanggaan atas jati diri serta semangat berprestasi.',
+    prompt:
+      'Bagaimana cara orang tua Papua mendampingi anak usia remaja agar tetap mau mendengar nasihat, bijak memakai HP, dan percaya diri di sekolah?',
+    icon: Compass,
+  },
+  {
+    stage: 'Dewasa Muda · 18+ Tahun',
+    title: 'Kemandirian & Persiapan Keluarga',
+    tip: 'Bimbing anak muda untuk mandiri secara karya dan keuangan, matang dalam iman dan karakter, serta paham nilai musyawarah adat sebelum melangkah ke jenjang perkawinan.',
+    prompt:
+      'Bagaimana membimbing anak muda Papua usia dewasa muda agar mandiri secara ekonomi dan siap secara mental, iman, serta adat sebelum menikah?',
+    icon: GraduationCap,
+  },
+];
+
+const FAMILY_STORIES = [
+  {
+    name: 'Yosep Kogoya & Ester Wanimbo',
+    role: 'Pasangan Muda',
+    community: 'Komunitas Keluarga Wamena · La Pago',
+    topic: 'Perkawinan Adat',
+    quote:
+      'Sebelum menikah, kami sempat bingung soal pembagian musyawarah adat dan kesiapan tabungan rumah tangga. Setelah berdiskusi bersama Sahabat Keluarga Papua AI, kami mendapat panduan dialog yang sopan dengan orang tua dan tetua adat, sehingga prosesi adat berjalan penuh damai tanpa membebani awal pernikahan kami.',
+    prompt:
+      'Bagaimana cara menyampaikan rencana musyawarah mas kawin dengan sopan kepada orang tua dan tetua adat?',
+  },
+  {
+    name: 'Martha Rumere',
+    role: 'Ibu Rumah Tangga & Kader Posyandu',
+    community: 'Keluarga Pesisir Biak · Saireri',
+    topic: 'Pendidikan Anak',
+    quote:
+      'Anak sulung kami yang masuk masa SMA mulai jarang bercerita dan lebih banyak diam. Lewat arahan dialek Papua yang hangat dari Sahabat AI, sa belajar praktik baku dengar tanpa langsung memarahi. Sekarang hubungan kami di rumah jauh lebih terbuka dan tenang.',
+    prompt:
+      'Bagaimana cara memulai obrolan baku dengar dengan anak remaja yang mulai tertutup di rumah?',
+  },
+  {
+    name: 'Daniel Korwa & Siti Rahmawati',
+    role: 'Pasangan Lintas Suku',
+    community: 'Forum Keluarga Harmonis Sorong · Domberai',
+    topic: 'Lintas Suku',
+    quote:
+      'Menyatukan dua kebiasaan keluarga dari suku dan latar belakang berbeda bukan hal mudah pada tahun-tahun pertama. Konsultasi di UGUWO KAA OWAA membantu kami menyusun kesepakatan rumah tangga yang saling menghormati iman dan menjaga silaturahmi dua keluarga besar.',
+    prompt:
+      'Bagaimana menjaga keharmonisan keluarga besar dalam pernikahan lintas suku dan budaya?',
+  },
+  {
+    name: 'Lukas Kayame',
+    role: 'Ayah Dua Anak & Guru Sekolah Dasar',
+    community: 'Komunitas Orang Tua Nabire · Meepago',
+    topic: 'Bahasa & Budaya',
+    quote:
+      'Kami khawatir anak-anak mulai lupa bahasa ibu karena kesibukan sekolah dan gawai. Dari ruang konsultasi ini, kami mulai rutin bercerita kisah leluhur dan mengenalkan kosakata daerah setiap makan malam bersama—anak-anak justru senang dan bangga.',
+    prompt:
+      'Bagaimana cara rutin mengenalkan bahasa ibu dan cerita budaya Papua kepada anak setiap malam di rumah?',
+  },
+];
+
+const CONSULT_STEPS = [
+  {
+    step: '01',
+    title: 'Pilih Gaya Dialek',
+    description:
+      'Tekan ikon pengatur di kotak chat untuk memilih gaya Papua Akrab, Campuran, atau Indonesia Baku.',
+    icon: SlidersHorizontal,
+  },
+  {
+    step: '02',
+    title: 'Pilih Topik Cepat',
+    description:
+      'Klik tombol topik seperti Perkawinan Adat atau Pendidikan Anak jika ingin langsung mulai diskusi.',
+    icon: LayoutGrid,
+  },
+  {
+    step: '03',
+    title: 'Tulis Pertanyaan Ko',
+    description:
+      'Ketik cerita atau pertanyaan keluarga di kolom pesan lalu tekan tombol kirim berikon panah.',
+    icon: MessageSquareText,
+  },
+  {
+    step: '04',
+    title: 'Baca & Salin Arahan',
+    description:
+      'Terima jawaban hangat yang ramah adat dan agama, lalu salin bila ingin dibagikan ke keluarga.',
+    icon: CheckCircle2,
+  },
+];
+
+const LOCAL_NUTRITION_TIPS = [
+  {
+    nutrient: 'Energi Alami',
+    title: 'Sagu & Papeda',
+    description:
+      'Sagu mengandung karbohidrat kompleks yang ramah pencernaan dan melepas energi secara bertahap—menjaga stamina orang tua yang bekerja dan anak-anak tetap aktif belajar tanpa lonjakan gula berlebih.',
+    prompt:
+      'Bagaimana cara memadukan papeda atau olahan sagu dengan lauk bergizi agar menjadi menu harian sehat untuk keluarga Papua?',
+    icon: Sprout,
+  },
+  {
+    nutrient: 'Serat & Vitamin',
+    title: 'Hipere, Keladi & Pisang',
+    description:
+      'Umbi-umbian kebun Papua seperti ubi jalar (hipere), keladi, dan pisang rebus kaya serat, kalium, serta vitamin alami yang baik untuk pencernaan, daya tahan tubuh, dan MPASI balita.',
+    prompt:
+      'Bagaimana tips mengolah hipere, keladi, dan pangan kebun Papua menjadi makanan bergizi untuk balita dan ibu hamil?',
+    icon: Leaf,
+  },
+  {
+    nutrient: 'Protein & Zat Besi',
+    title: 'Ikan Kuah Kuning & Sayur Gedi',
+    description:
+      'Memadukan ikan segar kaya omega-3 dengan sayur gedi (aibika) atau daun pepaya membantu mencukupi kebutuhan protein, kalsium, dan zat besi guna mencegah stunting serta menjaga tumbuh kembang anak.',
+    prompt:
+      'Apa manfaat ikan kuah kuning dan sayur gedi untuk mencegah stunting dan mendukung kesehatan keluarga Papua?',
+    icon: Fish,
+  },
+];
+
+const ANCESTRAL_TALES = [
+  {
+    id: 'cenderawasih',
+    origin: 'Pegunungan & Pesisir Papua',
+    value: 'Kasih Ibu & Kepatuhan Anak',
+    title: 'Kisah Burung Cenderawasih dan Benang Kulit Kayu',
+    story:
+      'Dahulu di sebuah kampung tenang di tepi hutan Papua, seorang mama tua memintal benang dari kulit kayu bersama anaknya dengan penuh kesabaran. Meski hidup sederhana, sang anak selalu mendengar nasihat mamanya agar tidak pernah menyakiti sesama maupun merusak hutan tempat mereka tinggal. Suatu pagi, ketulusan hati dan kepatuhan anak itu diberkati oleh Sang Pencipta—benang emas yang mereka pintal berubah menjadi sayap indah burung surga (Cenderawasih) yang menari di puncak pohon, menjadi pengingat turun-temurun bahwa kemuliaan hidup lahir dari bakti kepada orang tua dan hati yang tulus.',
+    familyLesson:
+      'Keindahan akhlak anak di masa depan tumbuh dari kesetiaan mendengar nasihat orang tua di rumah.',
+    aiPrompt:
+      'Ceritakan kembali dongeng Burung Cenderawasih versi cerita pengantar tidur yang hangat untuk anak-anak di rumah, lengkap dengan pesan moral hormat kepada orang tua.',
+  },
+  {
+    id: 'noken',
+    origin: 'La Pago & Meepago',
+    value: 'Ketekunan & Gotong Royong',
+    title: 'Dongeng Noken dan Anyaman Kesabaran',
+    story:
+      'Di dalam Honai yang hangat oleh asap tungku api, seorang mama menganyam serat pohon melinjo sedikit demi sedikit setiap malam. Anak-anaknya bertanya mengapa ia tak pernah lelah mengikat simpul kecil yang tampak sepele. Mama itu tersenyum dan menunjukkan bahwa satu helai serat mudah putus, tetapi ratusan simpul yang diikat sabar mampu menopang hasil kebun, kayu bakar, bahkan menggendong bayi dengan aman. Sejak itu, warga kampung menjaga tradisi noken sebagai simbol ketekunan dan persatuan keluarga.',
+    familyLesson:
+      'Rumah tangga yang kuat dibangun dari kesabaran dan kerja sama kecil setiap hari, seperti simpul noken yang saling mengikat.',
+    aiPrompt:
+      'Ceritakan dongeng tentang filosofi Noken dan kesabaran seorang mama kepada anak-anak kami agar mereka belajar tekun dan saling menolong.',
+  },
+  {
+    id: 'tungku',
+    origin: 'Bomberai & Pesisir Papua',
+    value: 'Kerukunan & Satu Tungku Tiga Batu',
+    title: 'Cerita Tiga Batu Penopang Periuk',
+    story:
+      'Pada zaman leluhur, sebuah keluarga besar hendak memasak hidangan bersama di tepi pantai. Mereka mencari tiga batu karang yang bentuk dan asalnya berbeda-beda untuk dijadikan tungku api. Awalnya setiap batu ingin menonjol sendiri, sehingga periuk miring dan hampir tumpah. Setelah tetua adat menata ketiga batu itu sejajar dan saling mengimbangi, api pun menyala tenang dan seluruh keluarga makan dengan kenyang serta penuh tawa.',
+    familyLesson:
+      'Suami, istri, dan keluarga besar meski berbeda suku atau keyakinan harus saling menopang agar api kehangatan rumah tidak padam.',
+    aiPrompt:
+      'Ceritakan dongeng rakyat tentang Tiga Batu Tungku (Satu Tungku Tiga Batu) dengan bahasa sederhana agar anak-anak mengerti arti rukun dalam perbedaan.',
+  },
+  {
+    id: 'teluk',
+    origin: 'Kepulauan Saireri & Teluk Cenderawasih',
+    value: 'Kejujuran & Menjaga Alam Leluhur',
+    title: 'Janji Dua Bersaudara di Atas Perahu Cadik',
+    story:
+      'Dua bersaudara mendayung perahu cadik menuju perairan biru sebelum fajar menyingsing. Sebelum berangkat, bapak mereka berpesan: ambillah ikan secukupnya untuk makan keluarga dan janda-janda di kampung, jangan serakah dan jangan merusak terumbu karang. Ketika badai tiba-tiba datang, keduanya tetap jujur menepati janji dan saling menjaga di atas perahu. Laut kembali teduh dan cahaya bintang menuntun mereka pulang dengan selamat ke pelukan keluarga.',
+    familyLesson:
+      'Rezeki keluarga menjadi berkat bila dicari dengan jujur, dibagikan dengan adil, dan menjaga alam titipan untuk anak cucu.',
+    aiPrompt:
+      'Ceritakan dongeng dua bersaudara di atas perahu cadik Papua tentang nilai kejujuran, berbagi dengan sesama, dan menjaga laut.',
+  },
+];
+
 export default function App() {
   const [activeNav, setActiveNav] = useState<'beranda' | 'konsultasi' | 'budaya' | 'tentang'>('beranda');
   const [activeHub, setActiveHub] = useState<HubCategoryId>('budaya');
   const [selectedExpressionIdx, setSelectedExpressionIdx] = useState(0);
   const [selectedRegionIdx, setSelectedRegionIdx] = useState(0);
+  const [activeStoryIdx, setActiveStoryIdx] = useState(0);
+  const [activeTaleIdx, setActiveTaleIdx] = useState(0);
   const [showAboutDetail, setShowAboutDetail] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -274,6 +478,16 @@ export default function App() {
 
   const activeExpression = PAPUA_EXPRESSIONS[selectedExpressionIdx];
   const activeRegion = WILAYAH_ADAT[selectedRegionIdx];
+  const activeStory = FAMILY_STORIES[activeStoryIdx];
+  const activeTale = ANCESTRAL_TALES[activeTaleIdx];
+
+  const handlePrevStory = () => {
+    setActiveStoryIdx((prev) => (prev - 1 + FAMILY_STORIES.length) % FAMILY_STORIES.length);
+  };
+
+  const handleNextStory = () => {
+    setActiveStoryIdx((prev) => (prev + 1) % FAMILY_STORIES.length);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F2EB] text-[#16241D]">
@@ -718,6 +932,376 @@ export default function App() {
               );
             })()}
           </div>
+
+          {/* Section Baru: Tumbuh Kembang Anak */}
+          <div className="mt-8 sm:mt-10">
+            <div className="flex flex-col gap-1.5 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                  Parenting Keluarga Papua
+                </p>
+                <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
+                  Tumbuh Kembang Anak
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#425249] max-w-md">
+                Panduan kasih sayang, iman, dan jati diri adat di setiap tahap usia anak.
+              </p>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+              {PARENTING_STAGES.map((item) => {
+                const StageIcon = item.icon;
+                return (
+                  <article
+                    key={item.stage}
+                    className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                          <StageIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                        </div>
+                        <span className="text-xs font-medium text-[#5C3D2E]">
+                          {item.stage}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-4 font-display text-base sm:text-lg font-bold text-[#16241D]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                        {item.tip}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleAskAI(item.prompt, 'Pendidikan Anak')}
+                      className="mt-5 inline-flex min-h-[38px] items-center gap-1.5 self-start text-xs font-semibold text-[#1D4A27] hover:text-[#5C3D2E] hover:underline underline-offset-4 transition-colors cursor-pointer"
+                    >
+                      <span>Tanya Sahabat AI</span>
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section Baru: Pangan Lokal Bergizi */}
+          <div className="mt-8 sm:mt-10">
+            <div className="flex flex-col gap-1.5 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                  Ketahanan Gizi Keluarga
+                </p>
+                <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
+                  Pangan Lokal Bergizi
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#425249] max-w-md">
+                Mengolah kekayaan alam Papua di meja makan untuk keluarga sehat dan generasi kuat.
+              </p>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+              {LOCAL_NUTRITION_TIPS.map((item) => {
+                const FoodIcon = item.icon;
+                return (
+                  <article
+                    key={item.title}
+                    className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                          <FoodIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                        </div>
+                        <span className="text-xs font-medium text-[#5C3D2E]">
+                          {item.nutrient}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-4 font-display text-base sm:text-lg font-bold text-[#16241D]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleAskAI(item.prompt, 'Keluarga Modern')}
+                      className="mt-5 inline-flex min-h-[38px] items-center gap-1.5 self-start text-xs font-semibold text-[#1D4A27] hover:text-[#5C3D2E] hover:underline underline-offset-4 transition-colors cursor-pointer"
+                    >
+                      <span>Tanya Menu & Gizi AI</span>
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section Baru: Suara Keluarga (Carousel Cerita & Testimoni) */}
+          <div className="mt-8 sm:mt-10">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                  Cerita Nyata Pengguna
+                </p>
+                <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
+                  Suara Keluarga
+                </h2>
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <span className="mr-1 text-xs font-medium text-[#5E6D64] tabular-nums">
+                  {activeStoryIdx + 1} / {FAMILY_STORIES.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={handlePrevStory}
+                  aria-label="Cerita keluarga sebelumnya"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#DFD8CA] bg-white text-[#1D4A27] transition-colors hover:border-[#1D4A27] hover:bg-[#1D4A27] hover:text-white cursor-pointer"
+                >
+                  <ChevronLeft className="h-5 w-5" strokeWidth={1.9} aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextStory}
+                  aria-label="Cerita keluarga berikutnya"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#DFD8CA] bg-white text-[#1D4A27] transition-colors hover:border-[#1D4A27] hover:bg-[#1D4A27] hover:text-white cursor-pointer"
+                >
+                  <ChevronRight className="h-5 w-5" strokeWidth={1.9} aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-7 shadow-xs">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2.5 text-xs text-[#5E6D64]">
+                    <Quote className="h-5 w-5 shrink-0 text-[#C9A24D]" strokeWidth={1.9} aria-hidden="true" />
+                    <span className="font-medium text-[#5C3D2E]">{activeStory.topic}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{activeStory.community}</span>
+                  </div>
+
+                  <blockquote className="mt-3 text-sm sm:text-base leading-relaxed text-[#25352C]">
+                    &ldquo;{activeStory.quote}&rdquo;
+                  </blockquote>
+
+                  <div className="mt-4 flex flex-col gap-3 border-t border-[#EFEAE0] pt-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-display text-sm font-bold text-[#16241D]">
+                        {activeStory.name}
+                      </p>
+                      <p className="text-xs text-[#5E6D64]">{activeStory.role}</p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleAskAI(activeStory.prompt, activeStory.topic)}
+                      className="inline-flex min-h-[40px] items-center justify-center gap-1.5 self-start rounded-full border border-[#1D4A27] px-4 py-2 text-xs font-semibold text-[#1D4A27] transition-colors hover:bg-[#1D4A27] hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
+                    >
+                      <span>Konsultasi Topik Serupa</span>
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Carousel Slide Selector Tabs */}
+              <div
+                className="mt-5 flex flex-wrap items-center gap-2 border-t border-[#EFEAE0] pt-4"
+                role="tablist"
+                aria-label="Pilih cerita keluarga"
+              >
+                {FAMILY_STORIES.map((story, idx) => {
+                  const isCurrent = idx === activeStoryIdx;
+                  return (
+                    <button
+                      key={story.name}
+                      type="button"
+                      role="tab"
+                      aria-selected={isCurrent}
+                      onClick={() => setActiveStoryIdx(idx)}
+                      className={`min-h-[36px] rounded-xl border px-3 py-1.5 text-left text-xs font-medium transition-colors cursor-pointer ${
+                        isCurrent
+                          ? 'border-[#1D4A27] bg-[#1D4A27] text-white'
+                          : 'border-[#E5DFD2] bg-[#FAF8F4] text-[#425249] hover:border-[#1D4A27]/50 hover:text-[#16241D]'
+                      }`}
+                    >
+                      {story.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Section Baru: Cerita Dongeng tentang Nilai-Nilai Leluhur */}
+          <div id="dongeng-leluhur" className="mt-8 sm:mt-10">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                  Tutur Kisah Warisan Papua
+                </p>
+                <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
+                  Cerita Dongeng tentang Nilai-Nilai Leluhur
+                </h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#425249] max-w-md">
+                Kisah pengantar tidur dan teladan rumah tangga agar generasi muda tidak lupa akar budayanya.
+              </p>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-7 shadow-xs">
+              {/* Tale Selector Tabs */}
+              <div
+                className="flex flex-wrap gap-2 border-b border-[#EFEAE0] pb-4"
+                role="tablist"
+                aria-label="Pilih cerita dongeng leluhur Papua"
+              >
+                {ANCESTRAL_TALES.map((tale, idx) => {
+                  const isSelected = idx === activeTaleIdx;
+                  return (
+                    <button
+                      key={tale.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={isSelected}
+                      onClick={() => setActiveTaleIdx(idx)}
+                      className={`inline-flex min-h-[38px] items-center gap-2 rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                        isSelected
+                          ? 'border-[#1D4A27] bg-[#1D4A27] text-white'
+                          : 'border-[#E2DCCF] bg-[#FAF8F4] text-[#425249] hover:border-[#1D4A27]/50 hover:text-[#16241D]'
+                      }`}
+                    >
+                      <BookHeart className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                      <span>{tale.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Tale Content */}
+              <div className="mt-5">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-[#5E6D64]">
+                  <span className="font-semibold text-[#5C3D2E]">{activeTale.value}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{activeTale.origin}</span>
+                </div>
+
+                <h3 className="mt-2 font-display text-lg sm:text-xl font-bold text-[#16241D]">
+                  {activeTale.title}
+                </h3>
+
+                <p className="mt-3 text-sm sm:text-base leading-relaxed text-[#25352C]">
+                  {activeTale.story}
+                </p>
+
+                <div className="mt-5 rounded-xl border border-[#EAE4D8] bg-[#FAF8F4] p-4">
+                  <div className="flex items-start gap-2.5">
+                    <Flame className="mt-0.5 h-4 w-4 shrink-0 text-[#C9A24D]" strokeWidth={2} aria-hidden="true" />
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-[#5C3D2E]">
+                        Pesan Leluhur untuk Keluarga
+                      </p>
+                      <p className="mt-1 text-xs sm:text-sm leading-relaxed text-[#25352C]">
+                        {activeTale.familyLesson}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleAskAI(activeTale.aiPrompt, 'Bahasa & Budaya')}
+                    className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <span>Ceritakan Dongeng Ini untuk Anak (AI)</span>
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleAskAI(
+                        'Buatkan satu cerita dongeng Papua singkat yang baru tentang nilai gotong royong, kejujuran, dan hormat kepada orang tua untuk dibacakan sebelum tidur.',
+                        'Bahasa & Budaya',
+                      )
+                    }
+                    className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full border border-[#1D4A27] px-5 py-2 text-xs font-semibold text-[#1D4A27] transition-colors hover:bg-[#1D4A27] hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <span>Minta Dongeng Baru dari AI</span>
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section Baru: Cara Konsultasi */}
+        <section
+          id="cara-konsultasi"
+          className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12"
+        >
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                Panduan Singkat
+              </p>
+              <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
+                Cara Konsultasi
+              </h2>
+              <p className="mt-1 text-xs sm:text-sm text-[#425249]">
+                Empat langkah mudah untuk mulai berinteraksi dengan Sahabat Keluarga Papua AI.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => scrollToChat(true)}
+              className="inline-flex min-h-[42px] items-center justify-center gap-2 self-start rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <span>Coba Konsultasi Sekarang</span>
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {CONSULT_STEPS.map((item) => {
+              const StepIcon = item.icon;
+              return (
+                <div
+                  key={item.step}
+                  className="rounded-2xl border border-[#E2DCCF] bg-white p-5 shadow-xs"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                      <StepIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                    </div>
+                    <span className="font-display text-sm font-bold text-[#C9A24D] tabular-nums">
+                      {item.step}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-4 font-display text-base font-bold text-[#16241D]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                    {item.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </section>
 
         {/* Tentang UGUWO KAA OWAA Section + 3 Cultural Photo Cards */}
@@ -812,21 +1396,69 @@ export default function App() {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-2 border-t border-white/15 pt-4 text-xs text-[#C6D8CC] sm:flex-row sm:items-center sm:justify-between">
-            <p>Copyright © 2026 UGUWO KAA OWAA.</p>
-            <div className="flex flex-wrap gap-4">
-              <a href="#beranda" className="hover:text-white">
-                Beranda
-              </a>
-              <a href="#konsultasi" className="hover:text-white">
-                Konsultasi AI
-              </a>
-              <a href="#budaya-hub" className="hover:text-white">
-                Budaya Papua
-              </a>
-              <a href="#tentang" className="hover:text-white">
-                Tentang Kami
-              </a>
+          <div className="mt-6 flex flex-col gap-5 border-t border-white/15 pt-5 md:flex-row md:items-center md:justify-between">
+            {/* Social Media Section */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#F2C22B]">
+                Terhubung & Bagikan
+              </span>
+              <div className="flex items-center gap-2.5">
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(
+                    'Mari belajar dan berkonsultasi keluarga bersama UGUWO KAA OWAA – Rumah Keluarga dari Papua: ' +
+                      (typeof window !== 'undefined' ? window.location.origin : ''),
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Bagikan melalui WhatsApp"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3.5 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                >
+                  <WhatsAppIcon className="h-4 w-4 shrink-0" />
+                  <span>WhatsApp</span>
+                </a>
+
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    typeof window !== 'undefined' ? window.location.href : 'https://uguwokaaowaa.id',
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Bagikan ke Facebook"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3.5 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                >
+                  <FacebookIcon className="h-4 w-4 shrink-0" />
+                  <span>Facebook</span>
+                </a>
+
+                <a
+                  href="https://www.instagram.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Kunjungi Instagram UGUWO KAA OWAA"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3.5 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                >
+                  <InstagramIcon className="h-4 w-4 shrink-0" />
+                  <span>Instagram</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 text-xs text-[#C6D8CC] sm:flex-row sm:items-center sm:gap-5">
+              <div className="flex flex-wrap gap-4">
+                <a href="#beranda" className="hover:text-white">
+                  Beranda
+                </a>
+                <a href="#konsultasi" className="hover:text-white">
+                  Konsultasi AI
+                </a>
+                <a href="#budaya-hub" className="hover:text-white">
+                  Budaya Papua
+                </a>
+                <a href="#tentang" className="hover:text-white">
+                  Tentang Kami
+                </a>
+              </div>
+              <p className="text-[#C6D8CC]">Copyright © 2026 UGUWO KAA OWAA.</p>
             </div>
           </div>
         </div>
