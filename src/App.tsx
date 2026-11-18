@@ -1,5 +1,6 @@
-import {useEffect, useRef, useState, type FormEvent} from 'react';
+import {useEffect, useMemo, useRef, useState, type FormEvent} from 'react';
 import {
+  Apple,
   ArrowRight,
   Baby,
   BookHeart,
@@ -8,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Compass,
+  Droplets,
   Feather,
   Fish,
   Flame,
@@ -22,10 +24,13 @@ import {
   MessageCircle,
   MessageSquareText,
   Quote,
+  Search,
   SlidersHorizontal,
   Sprout,
   User,
   Users,
+  Utensils,
+  Wheat,
   X,
 } from 'lucide-react';
 import {ChatAssistant, type UserProfile} from './components/ChatAssistant';
@@ -301,33 +306,133 @@ const CONSULT_STEPS = [
   },
 ];
 
+const PAPUA_FOOD_IMAGE_URL = '/src/assets/images/papua_local_food_1795004997993.jpg';
+
 const LOCAL_NUTRITION_TIPS = [
   {
-    nutrient: 'Energi Alami',
-    title: 'Sagu & Papeda',
+    nutrient: 'Karbohidrat & Energi',
+    title: 'Sagu',
     description:
-      'Sagu mengandung karbohidrat kompleks yang ramah pencernaan dan melepas energi secara bertahap—menjaga stamina orang tua yang bekerja dan anak-anak tetap aktif belajar tanpa lonjakan gula berlebih.',
+      'Sumber karbohidrat sebagai penyedia energi. Dapat diolah menjadi papeda, sagu bakar, atau makanan tradisional lainnya.',
     prompt:
       'Bagaimana cara memadukan papeda atau olahan sagu dengan lauk bergizi agar menjadi menu harian sehat untuk keluarga Papua?',
+    icon: Wheat,
+  },
+  {
+    nutrient: 'Serat & Vitamin A',
+    title: 'Ubi Jalar',
+    description:
+      'Sumber karbohidrat, serat, dan berbagai vitamin. Ubi berwarna oranye mengandung beta-karoten yang dapat diubah tubuh menjadi vitamin A.',
+    prompt:
+      'Bagaimana tips mengolah ubi jalar oranye (hipere) menjadi makanan bergizi untuk balita, ibu hamil, dan keluarga Papua?',
     icon: Sprout,
   },
   {
-    nutrient: 'Serat & Vitamin',
-    title: 'Hipere, Keladi & Pisang',
+    nutrient: 'Karbohidrat & Serat',
+    title: 'Keladi dan Talas',
     description:
-      'Umbi-umbian kebun Papua seperti ubi jalar (hipere), keladi, dan pisang rebus kaya serat, kalium, serta vitamin alami yang baik untuk pencernaan, daya tahan tubuh, dan MPASI balita.',
+      'Mengandung karbohidrat dan serat yang mengenyangkan. Harus dimasak dengan benar dan matang sempurna sebelum dikonsumsi.',
     prompt:
-      'Bagaimana tips mengolah hipere, keladi, dan pangan kebun Papua menjadi makanan bergizi untuk balita dan ibu hamil?',
+      'Bagaimana cara mengolah keladi dan talas dengan benar agar aman, lezat, dan bergizi untuk seluruh anggota keluarga?',
+    icon: Flame,
+  },
+  {
+    nutrient: 'Protein & Omega-3',
+    title: 'Ikan Lokal',
+    description:
+      'Sumber protein serta berbagai mineral penting. Ikan laut tertentu juga mengandung asam lemak omega-3 yang mendukung kecerdasan anak.',
+    prompt:
+      'Apa manfaat ikan lokal seperti ikan kuah kuning untuk mencegah stunting dan mendukung kecerdasan anak Papua?',
+    icon: Fish,
+  },
+  {
+    nutrient: 'Vitamin, Mineral & Serat',
+    title: 'Sayuran Lokal',
+    description:
+      'Daun gedi, pakis, daun singkong, dan sayuran lokal lainnya dapat menyediakan vitamin, mineral, zat besi, serta serat harian.',
+    prompt:
+      'Bagaimana cara memasak daun gedi, pakis, dan daun singkong agar nutrisinya tetap terjaga untuk keluarga?',
     icon: Leaf,
   },
   {
-    nutrient: 'Protein & Zat Besi',
-    title: 'Ikan Kuah Kuning & Sayur Gedi',
+    nutrient: 'Vitamin & Antioksidan',
+    title: 'Buah-buahan Lokal',
     description:
-      'Memadukan ikan segar kaya omega-3 dengan sayur gedi (aibika) atau daun pepaya membantu mencukupi kebutuhan protein, kalsium, dan zat besi guna mencegah stunting serta menjaga tumbuh kembang anak.',
+      'Pisang, pepaya, alpukat, dan buah musiman Papua menjadi sumber vitamin, mineral, dan serat alami untuk daya tahan tubuh.',
     prompt:
-      'Apa manfaat ikan kuah kuning dan sayur gedi untuk mencegah stunting dan mendukung kesehatan keluarga Papua?',
-    icon: Fish,
+      'Apa saja kombinasi buah-buahan lokal Papua seperti pisang, pepaya, dan alpukat yang baik untuk camilan sehat anak?',
+    icon: Apple,
+  },
+];
+
+const NUTRITION_PRINCIPLES = [
+  {
+    label: 'Makanan pokok',
+    detail: 'Sagu, ubi, keladi, atau sumber karbohidrat lokal lainnya.',
+  },
+  {
+    label: 'Lauk berprotein',
+    detail: 'Ikan, telur, ayam, dan kacang-kacangan.',
+  },
+  {
+    label: 'Sayuran',
+    detail: 'Sayuran hijau dan sayuran lokal (daun gedi, pakis, daun singkong).',
+  },
+  {
+    label: 'Buah',
+    detail: 'Pepaya, pisang, alpukat, atau buah musiman yang tersedia.',
+  },
+  {
+    label: 'Air minum',
+    detail: 'Air bersih dan aman dikonsumsi setiap hari.',
+  },
+];
+
+const DAILY_LOCAL_MENU = [
+  {
+    time: 'Pagi',
+    menu: 'Ubi rebus, telur, dan pepaya',
+  },
+  {
+    time: 'Siang',
+    menu: 'Papeda, ikan kuah kuning, sayur gedi',
+  },
+  {
+    time: 'Sore',
+    menu: 'Pisang atau buah lokal',
+  },
+  {
+    time: 'Malam',
+    menu: 'Keladi rebus, ikan, dan sayuran',
+  },
+];
+
+const LOCAL_FOOD_IMPORTANCE = [
+  {
+    number: '1',
+    title: 'Memperkuat kemandirian pangan',
+    description: 'Keluarga tidak selalu bergantung pada bahan pangan dari luar daerah.',
+  },
+  {
+    number: '2',
+    title: 'Menjaga budaya',
+    description: 'Pengetahuan tentang pangan tradisional diwariskan kepada generasi berikutnya.',
+  },
+  {
+    number: '3',
+    title: 'Mendukung ekonomi masyarakat',
+    description: 'Petani, nelayan, dan produsen lokal mendapatkan manfaat langsung.',
+  },
+  {
+    number: '4',
+    title: 'Meningkatkan kualitas gizi',
+    description: 'Variasi pangan membantu memenuhi kebutuhan zat gizi keluarga.',
+  },
+  {
+    number: '5',
+    title: 'Melindungi lingkungan',
+    description:
+      'Pemanfaatan pangan lokal yang dikelola secara berkelanjutan mendukung ekosistem dan sumber penghidupan masyarakat.',
   },
 ];
 
@@ -392,6 +497,9 @@ export default function App() {
   const [showAboutDetail, setShowAboutDetail] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const [userProfile, setUserProfile] = useState<UserProfile>(() => {
     try {
@@ -417,11 +525,44 @@ export default function App() {
   const chatInputRef = useRef<HTMLInputElement | null>(null);
   const heroChatRef = useRef<HTMLDivElement | null>(null);
   const hubRef = useRef<HTMLElement | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement | null>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setDraftName(userProfile.name);
     setDraftRegion(userProfile.region);
   }, [userProfile, profileModalOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setSearchFocused(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSearchFocused(false);
+        setMobileSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mobileSearchOpen) {
+      window.setTimeout(() => {
+        mobileSearchInputRef.current?.focus();
+      }, 60);
+    }
+  }, [mobileSearchOpen]);
 
   const scrollToChat = (focusInput = true) => {
     setActiveNav('konsultasi');
@@ -489,18 +630,147 @@ export default function App() {
     setActiveStoryIdx((prev) => (prev + 1) % FAMILY_STORIES.length);
   };
 
+  interface SearchItem {
+    id: string;
+    category: 'Topik Konsultasi' | 'Artikel & Gizi' | 'Dongeng Leluhur' | 'Parenting' | 'Wilayah Adat';
+    title: string;
+    subtitle: string;
+    keywords: string;
+    onSelect: () => void;
+  }
+
+  const searchIndex: SearchItem[] = useMemo(() => {
+    const items: SearchItem[] = [
+      ...FEATURE_CARDS.map((card) => ({
+        id: `hub-${card.id}`,
+        category: 'Topik Konsultasi' as const,
+        title: card.title,
+        subtitle: card.subtitle,
+        keywords: `${card.title} ${card.subtitle} ${card.topic}`,
+        onSelect: () => {
+          setActiveHub(card.id);
+          setActiveNav('budaya');
+          hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...MINI_ARTICLES.map((art, idx) => ({
+        id: `art-${idx}`,
+        category: 'Artikel & Gizi' as const,
+        title: art.title,
+        subtitle: art.summary,
+        keywords: `${art.title} ${art.summary}`,
+        onSelect: () => {
+          setActiveHub('artikel');
+          setActiveNav('budaya');
+          hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...LOCAL_NUTRITION_TIPS.map((food, idx) => ({
+        id: `food-${idx}`,
+        category: 'Artikel & Gizi' as const,
+        title: `${food.title} (${food.nutrient})`,
+        subtitle: food.description,
+        keywords: `${food.title} ${food.nutrient} ${food.description} pangan lokal gizi nutrisi ketahanan gizi`,
+        onSelect: () => {
+          document.getElementById('pangan-lokal')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      {
+        id: 'food-menu-sehari',
+        category: 'Artikel & Gizi' as const,
+        title: 'Prinsip Menu Bergizi & Contoh Menu Pangan Lokal 1 Hari',
+        subtitle: 'Kombinasi makanan pokok, lauk berprotein, sayuran, buah lokal, dan air minum bersih.',
+        keywords: 'menu sehari pagi siang sore malam prinsip gizi seimbang papeda ikan kuah kuning ketahanan gizi',
+        onSelect: () => {
+          document.getElementById('pangan-lokal')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
+      ...PARENTING_STAGES.map((stage, idx) => ({
+        id: `parenting-${idx}`,
+        category: 'Parenting' as const,
+        title: `${stage.title} · ${stage.stage}`,
+        subtitle: stage.tip,
+        keywords: `${stage.title} ${stage.stage} ${stage.tip} anak balita remaja dewasa muda`,
+        onSelect: () => {
+          document.getElementById('tumbuh-kembang-anak')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...ANCESTRAL_TALES.map((tale, idx) => ({
+        id: `tale-${tale.id}`,
+        category: 'Dongeng Leluhur' as const,
+        title: tale.title,
+        subtitle: `${tale.value} · ${tale.origin}`,
+        keywords: `${tale.title} ${tale.value} ${tale.origin} ${tale.familyLesson} dongeng cerita leluhur`,
+        onSelect: () => {
+          setActiveTaleIdx(idx);
+          document.getElementById('dongeng-leluhur')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...WILAYAH_ADAT.map((region, idx) => ({
+        id: `region-${region.name}`,
+        category: 'Wilayah Adat' as const,
+        title: `Adat ${region.name}`,
+        subtitle: region.area,
+        keywords: `${region.name} ${region.area} ${region.note} suku`,
+        onSelect: () => {
+          setActiveHub('direktori');
+          setSelectedRegionIdx(idx);
+          hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+    ];
+    return items;
+  }, []);
+
+  const searchResults = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) {
+      return searchIndex.slice(0, 5);
+    }
+    return searchIndex
+      .filter(
+        (item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.subtitle.toLowerCase().includes(q) ||
+          item.keywords.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q),
+      )
+      .slice(0, 7);
+  }, [searchIndex, searchQuery]);
+
+  const handleSelectSearchResult = (item: SearchItem) => {
+    setSearchFocused(false);
+    setMobileSearchOpen(false);
+    setSearchQuery('');
+    item.onSelect();
+  };
+
+  const handleSearchSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmed = searchQuery.trim();
+    if (!trimmed) return;
+    if (searchResults.length > 0) {
+      handleSelectSearchResult(searchResults[0]);
+    } else {
+      setSearchFocused(false);
+      setMobileSearchOpen(false);
+      setSearchQuery('');
+      handleAskAI(trimmed);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F2EB] text-[#16241D]">
-      {/* Top Header Bar: Deep Forest Green Matching Mockup */}
-      <header className="sticky top-0 z-40 bg-[#163B22] text-white shadow-sm">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      {/* Top Header Bar: Deep Forest Green, Spacious & Balanced */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#163B22] text-white shadow-sm">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 sm:gap-5 px-4 sm:px-6">
           {/* Brand Logo Lockup */}
           <a
             href="#beranda"
             onClick={() => setActiveNav('beranda')}
             className="inline-flex items-center gap-2.5 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2C22B] rounded-lg"
           >
-            <PapuaFamilyCrest className="h-10 w-12 shrink-0" />
+            <PapuaFamilyCrest className="h-9 w-11 sm:h-10 sm:w-12 shrink-0" />
             <div className="leading-none">
               <span className="block font-display text-sm sm:text-base font-bold tracking-wide text-white whitespace-nowrap">
                 UGUWO KAA OWAA
@@ -514,77 +784,179 @@ export default function App() {
           {/* Navigation Links */}
           <nav
             aria-label="Navigasi utama"
-            className="hidden md:flex items-center gap-1.5 lg:gap-2"
+            className="hidden md:flex items-center gap-1 xl:gap-1.5"
           >
             <a
               href="#beranda"
               onClick={() => setActiveNav('beranda')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 activeNav === 'beranda'
                   ? 'bg-[#F2C22B] text-[#16241D]'
-                  : 'text-white/90 hover:bg-white/10'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Home className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+              <Home className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
               <span>Beranda</span>
             </a>
 
             <button
               type="button"
               onClick={() => scrollToChat(true)}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 activeNav === 'konsultasi'
                   ? 'bg-[#F2C22B] text-[#16241D]'
-                  : 'text-white/90 hover:bg-white/10'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <MessageCircle className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+              <MessageCircle className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
               <span>Konsultasi AI</span>
             </button>
 
             <a
               href="#budaya-hub"
               onClick={() => setActiveNav('budaya')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 activeNav === 'budaya'
                   ? 'bg-[#F2C22B] text-[#16241D]'
-                  : 'text-white/90 hover:bg-white/10'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Feather className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+              <Feather className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
               <span>Budaya Papua</span>
             </a>
 
             <a
               href="#tentang"
               onClick={() => setActiveNav('tentang')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 activeNav === 'tentang'
                   ? 'bg-[#F2C22B] text-[#16241D]'
-                  : 'text-white/90 hover:bg-white/10'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Info className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+              <Info className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
               <span>Tentang Kami</span>
             </a>
           </nav>
 
-          {/* Right Action: Masuk / Profil + Mobile Trigger */}
+          {/* Right Action: Global Search + Masuk / Profil + Mobile Triggers */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* Desktop Global Search Bar */}
+            <div ref={searchContainerRef} className="relative hidden lg:block">
+              <form onSubmit={handleSearchSubmit} role="search" aria-label="Pencarian global">
+                <label htmlFor="header-global-search" className="sr-only">
+                  Cari topik konsultasi, artikel, atau dongeng leluhur
+                </label>
+                <div className="flex h-9 w-48 xl:w-64 items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3 transition-colors focus-within:border-[#F2C22B]">
+                  <Search className="h-3.5 w-3.5 shrink-0 text-[#F2C22B]" aria-hidden="true" />
+                  <input
+                    id="header-global-search"
+                    type="search"
+                    value={searchQuery}
+                    onFocus={() => setSearchFocused(true)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setSearchFocused(true);
+                    }}
+                    placeholder="Cari topik, artikel, dongeng..."
+                    className="w-full bg-transparent text-xs text-white placeholder:text-white/60 focus:outline-none"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      aria-label="Hapus pencarian"
+                      className="text-white/70 hover:text-white cursor-pointer"
+                    >
+                      <X className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              {searchFocused && (
+                <div className="absolute right-0 top-full z-50 mt-2 w-80 xl:w-96 overflow-hidden rounded-2xl border border-[#DFD8CA] bg-white text-[#16241D] shadow-xl">
+                  <div className="border-b border-[#EFEAE0] px-3.5 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#5C3D2E]">
+                    {searchQuery.trim() ? 'Hasil Pencarian' : 'Jelajahi Cepat'}
+                  </div>
+                  <div className="max-h-72 overflow-y-auto divide-y divide-[#F3EFE7]">
+                    {searchResults.length > 0 ? (
+                      searchResults.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => handleSelectSearchResult(item)}
+                          className="flex w-full flex-col gap-0.5 px-3.5 py-2.5 text-left transition-colors hover:bg-[#FAF8F4] cursor-pointer"
+                        >
+                          <span className="text-[10px] font-semibold text-[#1D4A27]">
+                            {item.category}
+                          </span>
+                          <span className="font-display text-xs font-bold text-[#16241D]">
+                            {item.title}
+                          </span>
+                          <span className="line-clamp-1 text-[11px] text-[#5E6D64]">
+                            {item.subtitle}
+                          </span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-3.5 py-3 text-xs text-[#5E6D64]">
+                        Tidak ditemukan topik yang persis cocok.
+                      </div>
+                    )}
+                  </div>
+                  {searchQuery.trim() && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const q = searchQuery.trim();
+                        setSearchFocused(false);
+                        setSearchQuery('');
+                        handleAskAI(q);
+                      }}
+                      className="flex w-full items-center justify-between gap-2 border-t border-[#EFEAE0] bg-[#FAF8F4] px-3.5 py-2.5 text-left text-xs font-semibold text-[#1D4A27] hover:bg-[#EFEAE0] cursor-pointer"
+                    >
+                      <span className="truncate">
+                        Tanyakan &ldquo;{searchQuery.trim()}&rdquo; ke Sahabat AI
+                      </span>
+                      <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Compact Tablet / Mobile Search Toggle */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileSearchOpen((open) => !open);
+                setMobileMenuOpen(false);
+              }}
+              aria-expanded={mobileSearchOpen}
+              aria-label="Buka pencarian"
+              className="inline-flex lg:hidden min-h-[42px] min-w-[42px] items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              <Search className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+            </button>
+
             <button
               type="button"
               onClick={() => setProfileModalOpen(true)}
               className="hidden sm:inline-flex min-h-[38px] items-center gap-1.5 rounded-full border border-white/35 bg-[#12301B] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:border-[#F2C22B] hover:bg-[#1E4A29] whitespace-nowrap shrink-0 cursor-pointer"
             >
               <User className="h-3.5 w-3.5 text-[#F2C22B]" strokeWidth={2} aria-hidden="true" />
-              <span className="max-w-[110px] truncate">
+              <span className="max-w-[100px] truncate">
                 {userProfile.name ? userProfile.name : 'Masuk'}
               </span>
             </button>
 
             <button
               type="button"
-              onClick={() => setMobileMenuOpen((open) => !open)}
+              onClick={() => {
+                setMobileMenuOpen((open) => !open);
+                setMobileSearchOpen(false);
+              }}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
               aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
@@ -598,6 +970,77 @@ export default function App() {
             </button>
           </div>
         </div>
+
+        {/* Tablet & Mobile Expandable Search Panel */}
+        {mobileSearchOpen && (
+          <div className="border-t border-white/15 bg-[#12301B] px-4 py-3 lg:hidden">
+            <form onSubmit={handleSearchSubmit} role="search" aria-label="Pencarian cepat">
+              <label htmlFor="mobile-global-search" className="sr-only">
+                Cari topik konsultasi, artikel, atau dongeng leluhur
+              </label>
+              <div className="flex h-10 items-center gap-2 rounded-full border border-white/25 bg-[#163B22] px-3.5 focus-within:border-[#F2C22B]">
+                <Search className="h-4 w-4 shrink-0 text-[#F2C22B]" aria-hidden="true" />
+                <input
+                  ref={mobileSearchInputRef}
+                  id="mobile-global-search"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari topik, artikel, atau dongeng..."
+                  className="w-full bg-transparent text-base sm:text-xs text-white placeholder:text-white/60 focus:outline-none"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Hapus pencarian"
+                    className="text-white/70 hover:text-white cursor-pointer"
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+            </form>
+
+            <div className="mt-2.5 max-h-60 overflow-y-auto rounded-xl bg-white text-[#16241D] divide-y divide-[#F3EFE7]">
+              {searchResults.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleSelectSearchResult(item)}
+                  className="flex w-full flex-col gap-0.5 px-3.5 py-2.5 text-left hover:bg-[#FAF8F4] cursor-pointer"
+                >
+                  <span className="text-[10px] font-semibold text-[#1D4A27]">
+                    {item.category}
+                  </span>
+                  <span className="font-display text-xs font-bold text-[#16241D]">
+                    {item.title}
+                  </span>
+                  <span className="line-clamp-1 text-[11px] text-[#5E6D64]">
+                    {item.subtitle}
+                  </span>
+                </button>
+              ))}
+              {searchQuery.trim() && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const q = searchQuery.trim();
+                    setMobileSearchOpen(false);
+                    setSearchQuery('');
+                    handleAskAI(q);
+                  }}
+                  className="flex w-full items-center justify-between gap-2 bg-[#FAF8F4] px-3.5 py-2.5 text-left text-xs font-semibold text-[#1D4A27] cursor-pointer"
+                >
+                  <span className="truncate">
+                    Tanyakan &ldquo;{searchQuery.trim()}&rdquo; ke Sahabat AI
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Mobile Drawer */}
         {mobileMenuOpen && (
@@ -687,9 +1130,9 @@ export default function App() {
           />
 
           <div className="relative z-10 mx-auto max-w-6xl px-4 pt-10 pb-14 sm:px-6 sm:pt-14 sm:pb-20">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center lg:gap-10">
               {/* Hero Left Copy */}
-              <div className="lg:col-span-7 text-white">
+              <div className="lg:col-span-6 xl:col-span-7 text-white">
                 <h1 className="font-display text-3xl sm:text-4xl lg:text-[46px] font-extrabold tracking-tight leading-[1.1] text-white drop-shadow-sm [text-wrap:balance]">
                   UGUWO KAA OWAA
                 </h1>
@@ -723,7 +1166,7 @@ export default function App() {
               <div
                 id="konsultasi"
                 ref={heroChatRef}
-                className="lg:col-span-5"
+                className="w-full lg:col-span-6 xl:col-span-5 lg:max-w-[490px] lg:ml-auto"
               >
                 <ChatAssistant
                   externalPrompt={externalPrompt}
@@ -934,7 +1377,7 @@ export default function App() {
           </div>
 
           {/* Section Baru: Tumbuh Kembang Anak */}
-          <div className="mt-8 sm:mt-10">
+          <div id="tumbuh-kembang-anak" className="mt-8 sm:mt-10">
             <div className="flex flex-col gap-1.5 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
@@ -989,59 +1432,258 @@ export default function App() {
             </div>
           </div>
 
-          {/* Section Baru: Pangan Lokal Bergizi */}
-          <div className="mt-8 sm:mt-10">
+          {/* Section: Ketahanan Gizi Keluarga — Pangan Lokal Bergizi dari Papua */}
+          <div id="pangan-lokal" className="mt-8 sm:mt-10 space-y-6">
             <div className="flex flex-col gap-1.5 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
                   Ketahanan Gizi Keluarga
                 </p>
                 <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
-                  Pangan Lokal Bergizi
+                  Pangan Lokal Bergizi dari Papua
                 </h2>
               </div>
               <p className="text-xs sm:text-sm text-[#425249] max-w-md">
-                Mengolah kekayaan alam Papua di meja makan untuk keluarga sehat dan generasi kuat.
+                Ketahanan gizi keluarga dimulai dari dapur rumah sendiri dengan kekayaan alam Papua.
               </p>
             </div>
 
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-              {LOCAL_NUTRITION_TIPS.map((item) => {
-                const FoodIcon = item.icon;
-                return (
-                  <article
-                    key={item.title}
-                    className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
-                          <FoodIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
-                        </div>
-                        <span className="text-xs font-medium text-[#5C3D2E]">
-                          {item.nutrient}
-                        </span>
-                      </div>
-
-                      <h3 className="mt-4 font-display text-base sm:text-lg font-bold text-[#16241D]">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#425249]">
-                        {item.description}
-                      </p>
-                    </div>
-
+            {/* Intro Hero Card with Papuan Cuisine Photo */}
+            <div className="overflow-hidden rounded-2xl border border-[#E2DCCF] bg-white shadow-xs">
+              <div className="grid grid-cols-1 lg:grid-cols-12">
+                <div className="lg:col-span-5">
+                  <img
+                    src={PAPUA_FOOD_IMAGE_URL}
+                    alt="Hidangan pangan lokal bergizi khas Papua: papeda, ikan kuah kuning, ubi jalar, keladi, sayur gedi, pepaya, pisang, dan air bersih"
+                    className="h-56 w-full object-cover lg:h-full"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex flex-col justify-center p-5 sm:p-7 lg:col-span-7">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                    Dapur Sehat Keluarga Papua
+                  </span>
+                  <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-[#16241D]">
+                    Ketahanan gizi keluarga dimulai dari dapur rumah sendiri.
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                    Papua memiliki kekayaan pangan lokal yang dapat menjadi sumber energi, protein,
+                    vitamin, mineral, dan serat bagi keluarga. Pangan lokal bukan sekadar warisan
+                    budaya, melainkan modal penting untuk membangun keluarga sehat, mandiri, dan
+                    tangguh menghadapi tantangan pangan.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => handleAskAI(item.prompt, 'Keluarga Modern')}
-                      className="mt-5 inline-flex min-h-[38px] items-center gap-1.5 self-start text-xs font-semibold text-[#1D4A27] hover:text-[#5C3D2E] hover:underline underline-offset-4 transition-colors cursor-pointer"
+                      onClick={() =>
+                        handleAskAI(
+                          'Bagaimana menyusun menu harian keluarga Papua yang bergizi seimbang dari bahan pangan lokal seperti sagu, ubi, keladi, ikan, dan sayur gedi?',
+                          'Keluarga Modern',
+                        )
+                      }
+                      className="inline-flex min-h-[40px] items-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] cursor-pointer"
                     >
-                      <span>Tanya Menu & Gizi AI</span>
+                      <span>Tanya Rencana Gizi ke Sahabat AI</span>
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
-                  </article>
-                );
-              })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 1. Mengenal Pangan Lokal Papua (6 Bahan Pangan) */}
+            <div>
+              <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                <h3 className="font-display text-base sm:text-lg font-bold text-[#16241D]">
+                  1. Mengenal Pangan Lokal Papua
+                </h3>
+                <p className="text-xs text-[#425249]">
+                  Enam bahan pangan lokal utama untuk memenuhi kebutuhan gizi keluarga.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {LOCAL_NUTRITION_TIPS.map((item) => {
+                  const FoodIcon = item.icon;
+                  return (
+                    <article
+                      key={item.title}
+                      className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 shadow-xs"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                            <FoodIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                          </div>
+                          <span className="text-xs font-medium text-[#5C3D2E]">
+                            {item.nutrient}
+                          </span>
+                        </div>
+
+                        <h4 className="mt-3.5 font-display text-base font-bold text-[#16241D]">
+                          {item.title}
+                        </h4>
+                        <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleAskAI(item.prompt, 'Keluarga Modern')}
+                        className="mt-4 inline-flex min-h-[36px] items-center gap-1.5 self-start text-xs font-semibold text-[#1D4A27] hover:text-[#5C3D2E] hover:underline underline-offset-4 transition-colors cursor-pointer"
+                      >
+                        <span>Tanya Menu &amp; Gizi AI</span>
+                        <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Prinsip Menu Bergizi & 3. Contoh Menu Satu Hari */}
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+              {/* 2. Prinsip Menu Bergizi Keluarga */}
+              <div className="rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs lg:col-span-5">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                    <Utensils className="h-4 w-4" strokeWidth={1.9} aria-hidden="true" />
+                  </div>
+                  <h3 className="font-display text-base sm:text-lg font-bold text-[#16241D]">
+                    2. Prinsip Menu Bergizi Keluarga
+                  </h3>
+                </div>
+                <p className="mt-2 text-xs sm:text-sm text-[#425249]">
+                  Pangan lokal perlu dikombinasikan agar kebutuhan gizi keluarga lebih seimbang:
+                </p>
+
+                <ul className="mt-4 space-y-2.5">
+                  {NUTRITION_PRINCIPLES.map((item) => (
+                    <li
+                      key={item.label}
+                      className="flex items-start gap-2.5 rounded-xl bg-[#FAF8F4] px-3.5 py-2.5 text-xs sm:text-sm"
+                    >
+                      {item.label === 'Air minum' ? (
+                        <Droplets
+                          className="mt-0.5 h-4 w-4 shrink-0 text-[#1D4A27]"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <CheckCircle2
+                          className="mt-0.5 h-4 w-4 shrink-0 text-[#1D4A27]"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <div>
+                        <span className="font-semibold text-[#16241D]">{item.label}: </span>
+                        <span className="text-[#425249]">{item.detail}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 3. Contoh Menu Pangan Lokal Selama Satu Hari */}
+              <div className="rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs lg:col-span-7 flex flex-col justify-between">
+                <div>
+                  <h3 className="font-display text-base sm:text-lg font-bold text-[#16241D]">
+                    3. Contoh Menu Pangan Lokal Selama Satu Hari
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#425249]">
+                    Susunan menu sederhana berbahan lokal Papua dari pagi hingga malam:
+                  </p>
+
+                  <div className="mt-4 overflow-hidden rounded-xl border border-[#E5DFD2]">
+                    <table className="w-full border-collapse text-left text-xs sm:text-sm">
+                      <thead>
+                        <tr className="bg-[#1D4A27] text-white">
+                          <th className="px-4 py-2.5 font-display font-semibold w-28">
+                            Waktu
+                          </th>
+                          <th className="px-4 py-2.5 font-display font-semibold">
+                            Contoh Menu
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#EFEAE0]">
+                        {DAILY_LOCAL_MENU.map((row) => (
+                          <tr key={row.time} className="bg-white hover:bg-[#FAF8F4]">
+                            <td className="px-4 py-3 font-semibold text-[#1D4A27]">
+                              {row.time}
+                            </td>
+                            <td className="px-4 py-3 text-[#25352C]">{row.menu}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <p className="mt-4 rounded-xl border border-[#EFEAE0] bg-[#FAF8F4] px-3.5 py-2.5 text-xs leading-relaxed text-[#425249]">
+                  Menu dapat disesuaikan dengan usia, kebutuhan gizi, ketersediaan pangan, dan kondisi
+                  kesehatan setiap anggota keluarga.
+                </p>
+              </div>
+            </div>
+
+            {/* 4. Mengapa Pangan Lokal Penting? */}
+            <div className="rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs">
+              <h3 className="font-display text-base sm:text-lg font-bold text-[#16241D]">
+                4. Mengapa Pangan Lokal Penting?
+              </h3>
+              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                {LOCAL_FOOD_IMPORTANCE.map((reason) => (
+                  <div
+                    key={reason.number}
+                    className="rounded-xl border border-[#EFEAE0] bg-[#FAF8F4] p-4"
+                  >
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1D4A27] text-xs font-bold text-white tabular-nums">
+                      {reason.number}
+                    </span>
+                    <h4 className="mt-2.5 font-display text-xs sm:text-sm font-bold text-[#16241D]">
+                      {reason.title}
+                    </h4>
+                    <p className="mt-1 text-xs leading-relaxed text-[#425249]">
+                      {reason.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 5. Pesan Utama */}
+            <div className="relative overflow-hidden rounded-2xl bg-[#1D4A27] p-6 sm:p-8 text-white shadow-sm">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-2xl">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#F2C22B]">
+                    5. Pesan Utama Ketahanan Gizi
+                  </p>
+                  <h3 className="mt-1 font-display text-xl sm:text-2xl font-extrabold tracking-tight text-white">
+                    PANGAN LOKAL, KELUARGA SEHAT, PAPUA KUAT
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#E7EFE9]">
+                    Kekayaan pangan Papua adalah kekuatan keluarga. Mari mengenali, menanam, mengolah,
+                    dan mengonsumsi pangan lokal yang beragam dan bergizi. Ketahanan pangan bukan hanya
+                    tentang ketersediaan makanan, tetapi juga tentang kecukupan gizi, kesehatan,
+                    budaya, dan kesejahteraan keluarga.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleAskAI(
+                      'Berikan ide menu pangan lokal Papua yang ramah balita dan lansia untuk satu minggu agar keluarga sehat dan kuat.',
+                      'Keluarga Modern',
+                    )
+                  }
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 self-start rounded-full bg-[#F2C22B] px-6 py-2.5 text-xs font-bold text-[#16241D] transition-colors hover:bg-[#E0B11F] whitespace-nowrap shrink-0 cursor-pointer lg:self-center"
+                >
+                  <span>Konsultasi Menu Gizi AI</span>
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
             </div>
           </div>
 

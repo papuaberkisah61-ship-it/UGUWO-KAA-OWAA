@@ -318,71 +318,86 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
       }`}
     >
       {/* Top Green Chat Header */}
-      <div className="flex items-center justify-between gap-2 bg-[#1D4A27] px-4 py-3 text-white">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-[#1D4A27] shadow-sm">
-            <Bot className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+      <div className="bg-[#1D4A27] text-white">
+        <div className="flex items-center justify-between gap-2.5 px-4 pt-3.5 pb-2.5">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-[#1D4A27] shadow-sm">
+              <Bot className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-display text-[15px] font-bold leading-snug text-white">
+                Sahabat Keluarga Papua AI
+              </p>
+              <p className="text-[11px] leading-tight text-[#CFE5D4]">
+                Konsultan Keluarga, Adat &amp; Budaya
+              </p>
+            </div>
           </div>
-          <div className="min-w-0">
-            <p className="truncate font-display text-sm font-bold leading-tight text-white">
-              Sahabat Keluarga Papua AI
-            </p>
-            <p className="truncate text-[11px] text-[#CFE5D4]">
-              {activeStyleLabel} · {fastMode ? 'Fast Response' : 'Mendalam'}
-              {selectedTopic !== 'Semua Topik' ? ` · ${selectedTopic}` : ''}
-            </p>
+
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => setShowOptions((prev) => !prev)}
+              aria-label="Atur gaya dialek Papua dan kecepatan respon"
+              aria-expanded={showOptions}
+              title="Atur dialek & kecepatan"
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${
+                showOptions
+                  ? 'bg-white/20 text-white'
+                  : 'text-[#E6F1E9] hover:bg-white/15'
+              }`}
+            >
+              <SlidersHorizontal className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
+            </button>
+
+            {hasUserMessages && (
+              <button
+                type="button"
+                onClick={handleReset}
+                aria-label="Mulai percakapan baru"
+                title="Percakapan baru"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#E6F1E9] hover:bg-white/15 transition-colors cursor-pointer"
+              >
+                <RotateCcw className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setIsExpanded((prev) => !prev)}
+              aria-label={isExpanded ? 'Perkecil jendela chat' : 'Perbesar jendela chat'}
+              title={isExpanded ? 'Perkecil' : 'Perbesar'}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#E6F1E9] hover:bg-white/15 transition-colors cursor-pointer"
+            >
+              {isExpanded ? (
+                <Minimize2 className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
+              ) : (
+                <Maximize2 className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
+              )}
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-1 shrink-0">
+        {/* Clean Status & Fast Response Sub-bar */}
+        <div className="flex items-center justify-between gap-2 border-t border-white/12 bg-[#163B22]/75 px-4 py-1.5 text-[11px]">
+          <span className="truncate text-[#D9ECE0]">
+            Dialek: <strong className="font-semibold text-white">{activeStyleLabel}</strong>
+            {selectedTopic !== 'Semua Topik' ? ` · ${selectedTopic}` : ''}
+          </span>
+
           <button
             type="button"
             onClick={() => setFastMode((prev) => !prev)}
             aria-pressed={fastMode}
             aria-label={fastMode ? 'Matikan mode Fast Response' : 'Aktifkan mode Fast Response'}
-            title={fastMode ? 'Fast Response aktif' : 'Mode Mendalam aktif'}
-            className={`inline-flex h-8 items-center gap-1 rounded-lg px-2 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               fastMode
                 ? 'bg-[#F2C22B] text-[#16241D]'
-                : 'bg-white/10 text-[#E6F1E9] hover:bg-white/20'
+                : 'bg-white/12 text-[#E6F1E9] hover:bg-white/20'
             }`}
           >
-            <Zap className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
-            <span className="hidden sm:inline">{fastMode ? 'Cepat' : 'Lengkap'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setShowOptions((prev) => !prev)}
-            aria-label="Atur gaya dialek Papua dan kecepatan respon"
-            aria-expanded={showOptions}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#E6F1E9] hover:bg-white/15 transition-colors cursor-pointer"
-          >
-            <SlidersHorizontal className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
-          </button>
-
-          {hasUserMessages && (
-            <button
-              type="button"
-              onClick={handleReset}
-              aria-label="Mulai percakapan baru"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#E6F1E9] hover:bg-white/15 transition-colors cursor-pointer"
-            >
-              <RotateCcw className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={() => setIsExpanded((prev) => !prev)}
-            aria-label={isExpanded ? 'Perkecil jendela chat' : 'Perbesar jendela chat'}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#E6F1E9] hover:bg-white/15 transition-colors cursor-pointer"
-          >
-            {isExpanded ? (
-              <Minimize2 className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
-            ) : (
-              <Maximize2 className="h-4 w-4" strokeWidth={1.85} aria-hidden="true" />
-            )}
+            <Zap className="h-3 w-3" strokeWidth={2.2} aria-hidden="true" />
+            <span>{fastMode ? 'Respon Kilat' : 'Mode Lengkap'}</span>
           </button>
         </div>
       </div>
