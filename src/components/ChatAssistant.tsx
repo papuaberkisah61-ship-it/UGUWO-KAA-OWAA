@@ -9,6 +9,7 @@ import {
   RotateCcw,
   Send,
   SlidersHorizontal,
+  Zap,
 } from 'lucide-react';
 
 export type DialectStyle = 'papua_akrab' | 'campuran' | 'formal';
@@ -122,6 +123,7 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
   ]);
   const [input, setInput] = useState('');
   const [style, setStyle] = useState<DialectStyle>('papua_akrab');
+  const [fastMode, setFastMode] = useState<boolean>(true);
   const [selectedTopic, setSelectedTopic] = useState<string>('Semua Topik');
   const [showOptions, setShowOptions] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -174,10 +176,13 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
       text: '',
     };
 
-    const historyForApi = [...messages, userMsg].map((m) => ({
-      role: m.role,
-      text: m.text,
-    }));
+    const historyWindow = fastMode ? 4 : 10;
+    const historyForApi = [...messages, userMsg]
+      .slice(-historyWindow)
+      .map((m) => ({
+        role: m.role,
+        text: m.text,
+      }));
 
     setMessages((prev) => [...prev, userMsg, placeholderAssistant]);
     setInput('');
@@ -194,6 +199,7 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
         body: JSON.stringify({
           messages: historyForApi,
           style,
+          fastMode,
           topic: activeTopic,
           userProfile:
             userProfile?.name || userProfile?.region ? userProfile : undefined,
@@ -322,7 +328,7 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
               Sahabat Keluarga Papua AI
             </p>
             <p className="truncate text-[11px] text-[#CFE5D4]">
-              Gaya: {activeStyleLabel}
+              {activeStyleLabel} · {fastMode ? 'Fast Response' : 'Mendalam'}
               {selectedTopic !== 'Semua Topik' ? ` · ${selectedTopic}` : ''}
             </p>
           </div>
@@ -331,8 +337,24 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
         <div className="flex items-center gap-1 shrink-0">
           <button
             type="button"
+            onClick={() => setFastMode((prev) => !prev)}
+            aria-pressed={fastMode}
+            aria-label={fastMode ? 'Matikan mode Fast Response' : 'Aktifkan mode Fast Response'}
+            title={fastMode ? 'Fast Response aktif' : 'Mode Mendalam aktif'}
+            className={`inline-flex h-8 items-center gap-1 rounded-lg px-2 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              fastMode
+                ? 'bg-[#F2C22B] text-[#16241D]'
+                : 'bg-white/10 text-[#E6F1E9] hover:bg-white/20'
+            }`}
+          >
+            <Zap className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+            <span className="hidden sm:inline">{fastMode ? 'Cepat' : 'Lengkap'}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setShowOptions((prev) => !prev)}
-            aria-label="Atur gaya dialek Papua"
+            aria-label="Atur gaya dialek Papua dan kecepatan respon"
             aria-expanded={showOptions}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#E6F1E9] hover:bg-white/15 transition-colors cursor-pointer"
           >
@@ -365,27 +387,56 @@ export function ChatAssistant({externalPrompt, inputRef, userProfile}: ChatAssis
         </div>
       </div>
 
-      {/* Collapsible Dialect & Topic Controls */}
+      {/* Collapsible Dialect & Fast Response Controls */}
       {showOptions && (
-        <div className="border-b border-[#E2DCCF] bg-white px-3.5 py-2.5">
-          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#5C3D2E]">
-            Pilih Gaya Dialek Bahasa
-          </p>
-          <div className="grid grid-cols-3 gap-1.5">
-            {DIALECT_MODES.map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                onClick={() => setStyle(mode.id)}
-                className={`min-h-[34px] rounded-lg px-2 py-1 text-xs font-medium transition-colors cursor-pointer ${
-                  style === mode.id
-                    ? 'bg-[#1D4A27] text-white'
-                    : 'bg-[#F3F1EC] text-[#425249] hover:bg-[#E7E3D9]'
+        <div className="space-y-3 border-b border-[#E2DCCF] bg-white px-3.5 py-3">
+          <div>
+            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#5C3D2E]">
+              Pilih Gaya Dialek Bahasa
+            </p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {DIALECT_MODES.map((mode) => (
+                <button
+                  key={mode.id}
+                  type="button"
+                  onClick={() => setStyle(mode.id)}
+                  className={`min-h-[34px] rounded-lg px-2 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                    style === mode.id
+                      ? 'bg-[#1D4A27] text-white'
+                      : 'bg-[#F3F1EC] text-[#425249] hover:bg-[#E7E3D9]'
+                  }`}
+                >
+                  {mode.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 border-t border-[#EFEAE0] pt-2.5">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-[#16241D]">
+                Fast Response Mode
+              </p>
+              <p className="text-[11px] text-[#5E6D64]">
+                Jawaban kilat dengan latensi rendah & tetap ramah dialek Papua.
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={fastMode}
+              onClick={() => setFastMode((prev) => !prev)}
+              className={`relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors cursor-pointer ${
+                fastMode ? 'bg-[#1D4A27]' : 'bg-[#D2CCBE]'
+              }`}
+            >
+              <span className="sr-only">Aktifkan Fast Response Mode</span>
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-xs transition-transform ${
+                  fastMode ? 'translate-x-6' : 'translate-x-1'
                 }`}
-              >
-                {mode.label}
-              </button>
-            ))}
+              />
+            </button>
           </div>
         </div>
       )}

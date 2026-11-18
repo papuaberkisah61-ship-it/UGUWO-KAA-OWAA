@@ -37,12 +37,14 @@ interface ChatRequestBody {
   style?: DialectStyle;
   topic?: string;
   userProfile?: UserProfileInput;
+  fastMode?: boolean;
 }
 
 function buildSystemInstruction(
   style: DialectStyle,
   topic?: string,
   userProfile?: UserProfileInput,
+  fastMode = true,
 ): string {
   let languageDirective = '';
 
@@ -73,32 +75,17 @@ function buildSystemInstruction(
   }
   const profileContext = profileLines.length > 0 ? `\nPROFIL PENGGUNA:\n${profileLines.join('\n')}` : '';
 
+  const responsePaceDirective = fastMode
+    ? 'FORMAT JAWABAN KILAT: Jawab langsung ke inti dalam 80–120 kata (kecuali diminta dongeng/penjelasan panjang), gunakan poin singkat yang rapi di HP, mulai dengan empati hangat, dan tutup dengan satu kalimat penguatan.'
+    : 'FORMAT JAWABAN MENDALAM: Berikan penjelasan yang kaya, bijak, dan terstruktur dalam 150–240 kata dengan contoh nyata kehidupan keluarga Papua, poin-poin rapi, empati hangat, serta satu kalimat penguatan di akhir.';
+
   return [
-    'Anda adalah "SAHABAT KELUARGA PAPUA AI", asisten konsultasi keluarga resmi dari platform "UGUWO KAA OWAA — Rumah Keluarga dari Papua".',
-    'Prinsip utama Anda: "Adat Dijaga, Agama Dihormati, Keluarga Dibangun, Generasi Dilindungi."',
+    'Anda adalah "SAHABAT KELUARGA PAPUA AI" dari platform "UGUWO KAA OWAA — Rumah Keluarga dari Papua" ("Adat Dijaga, Agama Dihormati, Keluarga Dibangun, Generasi Dilindungi").',
     topicFocus,
     profileContext,
-    '',
-    'RUANG LINGKUP KONSULTASI:',
-    '1. Konsultasi perkawinan adat Papua (musyawarah keluarga besar, mas kawin/mahar/arim yang bijaksana tanpa membebani masa depan rumah tangga baru, menghormati keberagaman wilayah adat seperti Tabi/Mamta, Saireri, Domberai, Bomberai, Anim Ha, La Pago, dan Meepago).',
-    '2. Konsultasi perkawinan agama dan kehidupan rohani dalam rumah tangga (menghormati iman Kristen, Katolik, Islam, maupun nilai luhur leluhur masyarakat Papua).',
-    '3. Hubungan suami dan istri (komunikasi terbuka, kesetiaan, pembagian peran yang adil, saling menghormati, menolak tegas segala bentuk kekerasan dalam rumah tangga).',
-    '4. Perkawinan lintas suku (menjembatani perbedaan adat, bahasa, dan harapan dua keluarga besar dengan sikap saling menghargai).',
-    '5. Pendidikan anak Papua (membangun karakter, iman, semangat belajar, percaya diri, dan menjaga jati diri budaya sejak di rumah).',
-    '6. Ekonomi keluarga (mengatur keuangan rumah tangga, menabung, keterbukaan suami-istri, dan menyeimbangkan kebutuhan inti keluarga dengan kewajiban sosial/adat).',
-    '7. Hubungan keluarga besar (menjaga keharmonisan dengan orang tua, mertua, ipar, om/tante, dan kerabat secara sehat).',
-    '8. Bahasa dan budaya Papua (pelestarian bahasa ibu, tutur kata penuh hormat, cerita leluhur, noken, musik/tari, dan nilai gotong royong).',
-    '9. Kehidupan keluarga modern di tengah perkembangan teknologi dan zaman.',
-    '10. Cerita dongeng dan kisah nilai-nilai leluhur Papua untuk anak dan keluarga (kisah Cenderawasih, Noken, Satu Tungku Tiga Batu, persaudaraan laut dan gunung—disampaikan hangat dengan pesan moral kejujuran, hormat orang tua, gotong royong, dan menjaga alam).',
-    '',
-    'GAYA BAHASA:',
-    languageDirective,
-    '',
-    'CARA MENJAWAB:',
-    '- Mulai dengan empati dan sapaan yang tulus.',
-    '- Berikan langkah praktis dan bijak dalam poin-poin singkat yang rapi dan nyaman dibaca di layar HP (sekitar 120–240 kata kecuali pengguna meminta penjelasan panjang).',
-    '- Jika pengguna menghadapi krisis berat (kekerasan rumah tangga, ancaman keselamatan, persoalan hukum, atau kondisi medis darurat), tunjukkan empati penuh dan arahkan dengan lembut untuk segera mencari pertolongan dari pendeta/imam/pemuka agama, tetua adat yang dipercaya, konselor keluarga, atau layanan bantuan/aparat berwenang setempat.',
-    '- Tutup dengan kalimat penguatan hangat atau pertanyaan lanjutan yang lembut.',
+    'TOPIK: Perkawinan adat & agama Papua (termasuk mas kawin bijak & 7 wilayah adat), hubungan suami-istri, lintas suku, pendidikan & parenting anak, ekonomi keluarga, keluarga besar, bahasa & dongeng nilai leluhur Papua, serta keluarga modern.',
+    `GAYA BAHASA: ${languageDirective}`,
+    `${responsePaceDirective} Untuk krisis berat (KDRT/darurat), arahkan dengan lembut ke pemuka agama, tetua adat, atau layanan bantuan setempat.`,
   ]
     .filter(Boolean)
     .join('\n');
@@ -172,6 +159,9 @@ async function startServer() {
         }
       : undefined;
 
+    const fastMode = body.fastMode !== false;
+    const historyLimit = fastMode ? 4 : 10;
+
     const sanitized = rawMessages
       .filter(
         (m): m is ChatMessageInput =>
@@ -180,10 +170,10 @@ async function startServer() {
           typeof m.text === 'string' &&
           m.text.trim().length > 0,
       )
-      .slice(-12)
+      .slice(-historyLimit)
       .map((m) => ({
         role: m.role,
-        text: m.text.trim().slice(0, 2000),
+        text: m.text.trim().slice(0, 1500),
       }));
 
     const firstUserIdx = sanitized.findIndex((m) => m.role === 'user');
@@ -202,9 +192,11 @@ async function startServer() {
       return;
     }
 
+    req.socket?.setNoDelay?.(true);
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no');
     res.flushHeaders?.();
 
     const sendEvent = (payload: Record<string, unknown>) => {
@@ -218,12 +210,12 @@ async function startServer() {
       }));
 
       const stream = await ai.models.generateContentStream({
-        model: 'gemini-4-hydrogen',
+        model: fastMode ? 'gemini-3.1-flash-lite' : 'gemini-4-hydrogen',
         contents,
         config: {
-          systemInstruction: buildSystemInstruction(style, topic, userProfile),
+          systemInstruction: buildSystemInstruction(style, topic, userProfile, fastMode),
           thinkingConfig: {
-            thinkingLevel: ThinkingLevel.LOW,
+            thinkingLevel: fastMode ? ThinkingLevel.MINIMAL : ThinkingLevel.LOW,
           },
         },
       });
