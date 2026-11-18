@@ -5,6 +5,7 @@ import {
   Baby,
   BookHeart,
   BookOpen,
+  BookOpenCheck,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
@@ -15,8 +16,10 @@ import {
   Flame,
   GraduationCap,
   HeartHandshake,
+  HeartPulse,
   Home,
   Info,
+  Languages,
   LayoutGrid,
   Leaf,
   MapPin,
@@ -25,11 +28,15 @@ import {
   MessageSquareText,
   Quote,
   Search,
+  ShieldCheck,
   SlidersHorizontal,
+  Smile,
+  Sparkles,
   Sprout,
   User,
   Users,
   Utensils,
+  Wallet,
   Wheat,
   X,
 } from 'lucide-react';
@@ -205,31 +212,154 @@ const MINI_ARTICLES = [
   },
 ];
 
+const PARENTING_FAMILY_IMAGE_URL =
+  '/src/assets/images/parenting_papua_family_1795005760301.jpg';
+
 const PARENTING_STAGES = [
   {
+    step: 'Tahap 01',
     stage: 'Usia Balita · 0–5 Tahun',
     title: 'Akar Kasih & Bahasa Ibu',
-    tip: 'Biasakan tutur kata lembut dan pelukan hangat setiap hari, kenalkan lagu serta kosakata bahasa daerah Papua di rumah, dan penuhi gizi alami dari pangan lokal agar anak tumbuh sehat serta merasa aman.',
+    points: [
+      'Kasih sayang, pelukan, dan rasa aman.',
+      'Perkembangan bicara dan bahasa ibu.',
+      'Gizi, ASI, MPASI, dan kebersihan.',
+      'Bermain, mengenal lingkungan, dan stimulasi.',
+      'Pendidikan iman melalui teladan sederhana.',
+    ],
+    goal: 'Anak sehat, merasa aman, dan mulai mengenal identitas keluarganya.',
     prompt:
-      'Bagaimana tips parenting Papua mendidik anak usia balita di rumah agar dekat dengan orang tua, sehat, dan mengenal bahasa ibu sejak kecil?',
+      'Bagaimana tips parenting Papua mendidik anak usia balita (0–5 tahun) agar sehat, merasa aman, dan mulai mengenal bahasa ibu serta teladan iman sejak kecil?',
     icon: Baby,
   },
   {
+    step: 'Tahap 02',
+    stage: 'Usia Anak Sekolah · 6–11 Tahun',
+    title: 'Karakter, Belajar & Rasa Ingin Tahu',
+    points: [
+      'Membiasakan membaca dan belajar.',
+      'Membangun disiplin tanpa kekerasan.',
+      'Mengembangkan bakat dan kreativitas.',
+      'Menghargai orang tua, guru, dan sesama.',
+      'Mengenal sejarah, budaya, dan bahasa Papua.',
+      'Mengajarkan tanggung jawab sesuai usia.',
+    ],
+    goal: 'Anak percaya diri, mandiri, memiliki karakter baik, dan senang belajar.',
+    prompt:
+      'Bagaimana cara membangun disiplin tanpa kekerasan dan menumbuhkan kebiasaan belajar pada anak usia sekolah (6–11 tahun) di keluarga Papua?',
+    icon: BookOpenCheck,
+  },
+  {
+    step: 'Tahap 03',
     stage: 'Usia Remaja · 12–17 Tahun',
     title: 'Baku Dengar & Percaya Diri',
-    tip: 'Bangun kebiasaan baku dengar tanpa langsung menghakimi agar remaja berani terbuka. Dampingi pergaulan serta penggunaan HP secara bijak, dan tanamkan kebanggaan atas jati diri serta semangat berprestasi.',
+    points: [
+      'Mendengarkan tanpa menghakimi.',
+      'Mendampingi pergaulan dan penggunaan HP.',
+      'Pendidikan kesehatan reproduksi sesuai usia.',
+      'Mengembangkan potensi dan cita-cita.',
+      'Mengenali tekanan teman sebaya dan perundungan.',
+      'Menumbuhkan kebanggaan atas identitas Papua.',
+    ],
+    goal: 'Remaja mampu mengambil keputusan sehat, bertanggung jawab, dan percaya diri.',
     prompt:
-      'Bagaimana cara orang tua Papua mendampingi anak usia remaja agar tetap mau mendengar nasihat, bijak memakai HP, dan percaya diri di sekolah?',
+      'Bagaimana cara orang tua Papua mendampingi remaja usia 12–17 tahun dengan pendekatan baku dengar, bijak memakai HP, dan percaya diri atas jati dirinya?',
     icon: Compass,
   },
   {
-    stage: 'Dewasa Muda · 18+ Tahun',
+    step: 'Tahap 04',
+    stage: 'Dewasa Muda · 18 Tahun ke Atas',
     title: 'Kemandirian & Persiapan Keluarga',
-    tip: 'Bimbing anak muda untuk mandiri secara karya dan keuangan, matang dalam iman dan karakter, serta paham nilai musyawarah adat sebelum melangkah ke jenjang perkawinan.',
+    points: [
+      'Kemandirian pendidikan dan pekerjaan.',
+      'Literasi keuangan dan pengelolaan ekonomi.',
+      'Kedewasaan emosional dan tanggung jawab.',
+      'Hubungan sehat dan saling menghormati.',
+      'Persiapan perkawinan dan kehidupan keluarga.',
+      'Memahami musyawarah, adat, dan nilai iman.',
+    ],
+    goal: 'Generasi muda siap membangun kehidupan mandiri dan keluarga yang sehat.',
     prompt:
-      'Bagaimana membimbing anak muda Papua usia dewasa muda agar mandiri secara ekonomi dan siap secara mental, iman, serta adat sebelum menikah?',
+      'Bagaimana membimbing dewasa muda Papua (18+ tahun) agar mandiri dalam pekerjaan, literasi keuangan, serta siap secara iman dan adat memasuki kehidupan berkeluarga?',
     icon: GraduationCap,
   },
+];
+
+const PARENTING_PILLARS = [
+  {
+    number: '1',
+    title: 'Kasih Sayang dan Perlindungan',
+    description:
+      'Membangun hubungan orang tua dan anak yang aman, penuh perhatian, serta bebas dari kekerasan.',
+    icon: ShieldCheck,
+  },
+  {
+    number: '2',
+    title: 'Bahasa Ibu dan Budaya',
+    description:
+      'Mengenalkan bahasa daerah, cerita rakyat, sejarah keluarga, adat, dan identitas masyarakat Papua.',
+    icon: Languages,
+  },
+  {
+    number: '3',
+    title: 'Gizi dan Kesehatan',
+    description:
+      'Mengenalkan makanan lokal bergizi, pemantauan pertumbuhan, imunisasi, kebersihan, dan kesehatan keluarga.',
+    icon: HeartPulse,
+  },
+  {
+    number: '4',
+    title: 'Pendidikan dan Literasi',
+    description:
+      'Membiasakan membaca, belajar, berpikir kritis, dan menggunakan teknologi secara bertanggung jawab.',
+    icon: BookOpen,
+  },
+  {
+    number: '5',
+    title: 'Iman dan Spiritualitas',
+    description:
+      'Menanamkan nilai kasih, kejujuran, pengampunan, tanggung jawab, dan penghormatan terhadap sesama sesuai keyakinan keluarga.',
+    icon: Sparkles,
+  },
+  {
+    number: '6',
+    title: 'Ekonomi Keluarga',
+    description:
+      'Mengajarkan kemandirian, kebiasaan menabung, pengelolaan kebutuhan rumah tangga, dan keterampilan hidup.',
+    icon: Wallet,
+  },
+  {
+    number: '7',
+    title: 'Kesehatan Mental dan Emosi',
+    description:
+      'Mengembangkan komunikasi sehat, pengendalian emosi, rasa percaya diri, serta kemampuan menghadapi masalah.',
+    icon: Smile,
+  },
+  {
+    number: '8',
+    title: 'Adat dan Hubungan Sosial',
+    description:
+      'Menghargai orang tua, keluarga besar, tetua adat, musyawarah, gotong royong, dan tanggung jawab sosial.',
+    icon: Users,
+  },
+];
+
+const PARENTING_SAMPLE_QUESTIONS = [
+  'Mengapa anak saya sulit berbicara?',
+  'Bagaimana menghadapi anak yang sering menangis?',
+  'Bagaimana membatasi penggunaan HP pada remaja?',
+  'Bagaimana mengenalkan bahasa ibu kepada anak?',
+  'Bagaimana menyiapkan makanan bergizi dari pangan lokal?',
+  'Bagaimana berbicara dengan anak yang mulai tertutup?',
+  'Bagaimana mempersiapkan anak muda memasuki kehidupan berkeluarga?',
+];
+
+const PARENTING_AGE_FILTERS = [
+  'Semua Usia',
+  'Balita (0–5 Tahun)',
+  'Anak Sekolah (6–11 Tahun)',
+  'Remaja (12–17 Tahun)',
+  'Dewasa Muda (18+ Tahun)',
 ];
 
 const FAMILY_STORIES = [
@@ -494,6 +624,7 @@ export default function App() {
   const [selectedRegionIdx, setSelectedRegionIdx] = useState(0);
   const [activeStoryIdx, setActiveStoryIdx] = useState(0);
   const [activeTaleIdx, setActiveTaleIdx] = useState(0);
+  const [selectedParentingAge, setSelectedParentingAge] = useState<string>('Semua Usia');
   const [showAboutDetail, setShowAboutDetail] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -688,11 +819,21 @@ export default function App() {
       ...PARENTING_STAGES.map((stage, idx) => ({
         id: `parenting-${idx}`,
         category: 'Parenting' as const,
-        title: `${stage.title} · ${stage.stage}`,
-        subtitle: stage.tip,
-        keywords: `${stage.title} ${stage.stage} ${stage.tip} anak balita remaja dewasa muda`,
+        title: `${stage.step} · ${stage.stage} — ${stage.title}`,
+        subtitle: stage.goal,
+        keywords: `${stage.step} ${stage.title} ${stage.stage} ${stage.points.join(' ')} ${stage.goal} parenting anak sekolah balita remaja dewasa muda`,
         onSelect: () => {
           document.getElementById('tumbuh-kembang-anak')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...PARENTING_PILLARS.map((pillar) => ({
+        id: `pillar-${pillar.number}`,
+        category: 'Parenting' as const,
+        title: `Pilar Parenting ${pillar.number}: ${pillar.title}`,
+        subtitle: pillar.description,
+        keywords: `${pillar.title} ${pillar.description} delapan pilar parenting keluarga papua`,
+        onSelect: () => {
+          document.getElementById('delapan-pilar-parenting')?.scrollIntoView({behavior: 'smooth', block: 'start'});
         },
       })),
       ...ANCESTRAL_TALES.map((tale, idx) => ({
@@ -1376,59 +1517,271 @@ export default function App() {
             })()}
           </div>
 
-          {/* Section Baru: Tumbuh Kembang Anak */}
-          <div id="tumbuh-kembang-anak" className="mt-8 sm:mt-10">
+          {/* Section Fitur Utama: PARENTING KELUARGA PAPUA */}
+          <div id="tumbuh-kembang-anak" className="mt-8 sm:mt-10 space-y-6">
             <div className="flex flex-col gap-1.5 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
-                  Parenting Keluarga Papua
+                  UGUWO KAA OWAA · Parenting Keluarga Papua
                 </p>
                 <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
-                  Tumbuh Kembang Anak
+                  Merawat Anak, Menguatkan Keluarga, Melestarikan Jati Diri Papua.
                 </h2>
               </div>
               <p className="text-xs sm:text-sm text-[#425249] max-w-md">
-                Panduan kasih sayang, iman, dan jati diri adat di setiap tahap usia anak.
+                Pusat pendampingan keluarga yang memadukan ilmu tumbuh kembang anak, kearifan adat, bahasa ibu, iman, kesehatan, dan AI.
               </p>
             </div>
 
-            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-              {PARENTING_STAGES.map((item) => {
-                const StageIcon = item.icon;
-                return (
-                  <article
-                    key={item.stage}
-                    className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
-                          <StageIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
-                        </div>
-                        <span className="text-xs font-medium text-[#5C3D2E]">
-                          {item.stage}
-                        </span>
-                      </div>
-
-                      <h3 className="mt-4 font-display text-base sm:text-lg font-bold text-[#16241D]">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#425249]">
-                        {item.tip}
-                      </p>
-                    </div>
-
+            {/* Deskripsi Utama Banner */}
+            <div className="overflow-hidden rounded-2xl border border-[#E2DCCF] bg-white shadow-xs">
+              <div className="grid grid-cols-1 lg:grid-cols-12">
+                <div className="lg:col-span-5">
+                  <img
+                    src={PARENTING_FAMILY_IMAGE_URL}
+                    alt="Keluarga Papua duduk bersama membaca buku cerita anak penuh kasih sayang dan kehangatan"
+                    className="h-56 w-full object-cover lg:h-full"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex flex-col justify-center p-5 sm:p-7 lg:col-span-7">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                    Pusat Pendampingan Orang Tua &amp; Keluarga
+                  </span>
+                  <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-[#16241D]">
+                    Setiap anak berhak tumbuh dalam keluarga yang penuh kasih, aman, sehat, dan menghargai jati dirinya.
+                  </h3>
+                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                    UGUWO KAA OWAA hadir sebagai ruang belajar bagi orang tua, calon orang tua, remaja,
+                    dan keluarga Papua untuk memahami setiap tahap perkembangan anak. Kami menggabungkan
+                    pengetahuan pengasuhan modern dengan kearifan lokal Papua, bahasa ibu, nilai adat,
+                    pendidikan iman, serta pemanfaatan pangan lokal.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => handleAskAI(item.prompt, 'Pendidikan Anak')}
-                      className="mt-5 inline-flex min-h-[38px] items-center gap-1.5 self-start text-xs font-semibold text-[#1D4A27] hover:text-[#5C3D2E] hover:underline underline-offset-4 transition-colors cursor-pointer"
+                      onClick={() =>
+                        handleAskAI(
+                          'Halo Sahabat AI, saya ingin berkonsultasi tentang pengasuhan dan tumbuh kembang anak di keluarga Papua.',
+                          'Pendidikan Anak',
+                        )
+                      }
+                      className="inline-flex min-h-[40px] items-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] cursor-pointer"
                     >
-                      <span>Tanya Sahabat AI</span>
+                      <span>Konsultasi Parenting AI</span>
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
-                  </article>
-                );
-              })}
+                    <a
+                      href="#delapan-pilar-parenting"
+                      className="inline-flex min-h-[40px] items-center rounded-full border border-[#DFD8CA] px-4 py-2 text-xs font-semibold text-[#16241D] transition-colors hover:border-[#1D4A27] hover:text-[#1D4A27]"
+                    >
+                      Lihat 8 Pilar Parenting
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 1. Peta Tumbuh Kembang Anak (4 Kelompok Usia) */}
+            <div>
+              <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                <h3 className="font-display text-base sm:text-lg font-bold text-[#16241D]">
+                  1. Peta Tumbuh Kembang Anak
+                </h3>
+                <p className="text-xs text-[#425249]">
+                  Empat kelompok usia agar tidak ada tahapan perkembangan anak yang terlewat.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {PARENTING_STAGES.map((item) => {
+                  const StageIcon = item.icon;
+                  return (
+                    <article
+                      key={item.step}
+                      className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 sm:p-6 shadow-xs"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                              <StageIcon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                            </div>
+                            <div>
+                              <span className="block text-[11px] font-bold uppercase tracking-wider text-[#5C3D2E]">
+                                {item.step}
+                              </span>
+                              <span className="block text-xs font-semibold text-[#1D4A27]">
+                                {item.stage}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <h4 className="mt-4 font-display text-base sm:text-lg font-bold text-[#16241D]">
+                          {item.title}
+                        </h4>
+
+                        <ul className="mt-3 space-y-1.5">
+                          {item.points.map((point) => (
+                            <li
+                              key={point}
+                              className="flex items-start gap-2 text-xs sm:text-sm text-[#425249]"
+                            >
+                              <CheckCircle2
+                                className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#1D4A27]"
+                                aria-hidden="true"
+                              />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="mt-4 rounded-xl border border-[#EFEAE0] bg-[#FAF8F4] px-3.5 py-2.5 text-xs text-[#25352C]">
+                          <strong className="font-semibold text-[#1D4A27]">Tujuan: </strong>
+                          {item.goal}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleAskAI(item.prompt, 'Pendidikan Anak')}
+                        className="mt-4 inline-flex min-h-[40px] items-center gap-1.5 self-start rounded-full border border-[#1D4A27] px-4 py-1.5 text-xs font-semibold text-[#1D4A27] transition-colors hover:bg-[#1D4A27] hover:text-white cursor-pointer"
+                      >
+                        <span>Tanya Sahabat AI</span>
+                        <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Delapan Pilar Parenting Keluarga Papua */}
+            <div id="delapan-pilar-parenting">
+              <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                <h3 className="font-display text-base sm:text-lg font-bold text-[#16241D]">
+                  2. Delapan Pilar Parenting Keluarga Papua
+                </h3>
+                <p className="text-xs text-[#425249]">
+                  Pondasi pengasuhan menyeluruh yang memadukan kasih keluarga, budaya, dan nilai iman.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                {PARENTING_PILLARS.map((pillar) => {
+                  const PillarIcon = pillar.icon;
+                  return (
+                    <article
+                      key={pillar.number}
+                      className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-4 sm:p-5 shadow-xs"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F3EFE7] text-[#1D4A27]">
+                            <PillarIcon className="h-4 w-4" strokeWidth={1.9} aria-hidden="true" />
+                          </div>
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#1D4A27] text-[11px] font-bold text-white tabular-nums">
+                            {pillar.number}
+                          </span>
+                        </div>
+
+                        <h4 className="mt-3 font-display text-sm font-bold text-[#16241D]">
+                          {pillar.title}
+                        </h4>
+                        <p className="mt-1.5 text-xs leading-relaxed text-[#425249]">
+                          {pillar.description}
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleAskAI(
+                            `Bagaimana cara mempraktikkan pilar parenting "${pillar.title}" dalam kehidupan keluarga Papua sehari-hari?`,
+                            'Pendidikan Anak',
+                          )
+                        }
+                        className="mt-3.5 inline-flex items-center gap-1 self-start text-[11px] font-semibold text-[#1D4A27] hover:text-[#5C3D2E] hover:underline underline-offset-4 cursor-pointer"
+                      >
+                        <span>Konsultasi pilar ini</span>
+                        <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                      </button>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3. Fitur Tanya Sahabat AI (Pusat Interaksi Parenting) */}
+            <div className="rounded-2xl border border-[#DFD8CA] bg-white p-5 sm:p-7 shadow-xs">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                    Pusat Interaksi Parenting
+                  </span>
+                  <h3 className="mt-0.5 font-display text-base sm:text-lg font-bold text-[#16241D]">
+                    3. Fitur Tanya Sahabat AI
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-[#425249]">
+                    Pilih kelompok usia anak lalu klik pertanyaan di bawah untuk langsung berkonsultasi dengan Sahabat Keluarga Papua AI.
+                  </p>
+                </div>
+              </div>
+
+              {/* Age Context Selector */}
+              <div className="mt-4 flex flex-wrap items-center gap-1.5">
+                <span className="mr-1 text-xs font-semibold text-[#5C3D2E]">
+                  Fokus Usia:
+                </span>
+                {PARENTING_AGE_FILTERS.map((ageLabel) => {
+                  const isActive = selectedParentingAge === ageLabel;
+                  return (
+                    <button
+                      key={ageLabel}
+                      type="button"
+                      onClick={() => setSelectedParentingAge(ageLabel)}
+                      className={`min-h-[34px] rounded-full border px-3 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                        isActive
+                          ? 'border-[#1D4A27] bg-[#1D4A27] text-white'
+                          : 'border-[#E2DCCF] bg-[#FAF8F4] text-[#425249] hover:border-[#1D4A27]/50 hover:text-[#16241D]'
+                      }`}
+                    >
+                      {ageLabel}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* 7 Curated Parenting Questions */}
+              <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                {PARENTING_SAMPLE_QUESTIONS.map((question) => (
+                  <button
+                    key={question}
+                    type="button"
+                    onClick={() => {
+                      const promptWithContext =
+                        selectedParentingAge === 'Semua Usia'
+                          ? question
+                          : `[Fokus usia anak: ${selectedParentingAge}] ${question}`;
+                      handleAskAI(promptWithContext, 'Pendidikan Anak');
+                    }}
+                    className="flex min-h-[44px] items-center justify-between gap-2.5 rounded-xl border border-[#E5DFD2] bg-[#FAF8F4] px-3.5 py-2.5 text-left text-xs font-medium text-[#16241D] transition-colors hover:border-[#1D4A27] hover:bg-[#1D4A27] hover:text-white cursor-pointer group"
+                  >
+                    <span className="flex items-start gap-2">
+                      <MessageCircle
+                        className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#1D4A27] group-hover:text-[#F2C22B]"
+                        aria-hidden="true"
+                      />
+                      <span>{question}</span>
+                    </span>
+                    <ArrowRight
+                      className="h-3.5 w-3.5 shrink-0 text-[#5E6D64] group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
