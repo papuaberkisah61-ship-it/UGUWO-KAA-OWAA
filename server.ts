@@ -74,7 +74,7 @@ function buildSystemInstruction(
   const profileContext = profileLines.length > 0 ? `\nPROFIL PENGGUNA:\n${profileLines.join('\n')}` : '';
 
   return [
-    'Anda adalah "SAHABAT KELUARGA PAPUA AI", asisten konsultasi keluarga resmi dari platform "UGUWOO KAA OWAA — Rumah Keluarga dari Papua".',
+    'Anda adalah "SAHABAT KELUARGA PAPUA AI", asisten konsultasi keluarga resmi dari platform "UGUWO KAA OWAA — Rumah Keluarga dari Papua".',
     'Prinsip utama Anda: "Adat Dijaga, Agama Dihormati, Keluarga Dibangun, Generasi Dilindungi."',
     topicFocus,
     profileContext,
@@ -144,7 +144,7 @@ async function startServer() {
   app.use(express.json({limit: '64kb'}));
 
   app.get('/api/health', (_req: Request, res: Response) => {
-    res.json({ok: true, service: 'UGUWOO KAA OWAA'});
+    res.json({ok: true, service: 'UGUWO KAA OWAA'});
   });
 
   app.post('/api/chat', async (req: Request, res: Response) => {
@@ -272,7 +272,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`UGUWOO KAA OWAA server listening on http://0.0.0.0:${PORT}`);
+    console.log(`UGUWO KAA OWAA server listening on http://0.0.0.0:${PORT}`);
   });
 }
 

@@ -289,7 +289,7 @@ export default function App() {
             <PapuaFamilyCrest className="h-10 w-12 shrink-0" />
             <div className="leading-none">
               <span className="block font-display text-sm sm:text-base font-bold tracking-wide text-white whitespace-nowrap">
-                UGUWOO KAA OWAA
+                UGUWO KAA OWAA
               </span>
               <span className="mt-0.5 block text-[9px] sm:text-[10px] font-semibold tracking-wider text-[#F2C22B] whitespace-nowrap">
                 RUMAH KELUARGA DARI PAPUA
@@ -477,7 +477,7 @@ export default function App() {
               {/* Hero Left Copy */}
               <div className="lg:col-span-7 text-white">
                 <h1 className="font-display text-3xl sm:text-4xl lg:text-[46px] font-extrabold tracking-tight leading-[1.1] text-white drop-shadow-sm [text-wrap:balance]">
-                  UGUWOO KAA OWAA
+                  UGUWO KAA OWAA
                 </h1>
                 <p className="mt-1.5 font-display text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-[#F2C22B] drop-shadow-sm">
                   Rumah Keluarga dari Papua
@@ -526,7 +526,7 @@ export default function App() {
           id="budaya-hub"
           ref={hubRef}
           className="relative z-20 mx-auto -mt-7 sm:-mt-9 max-w-6xl px-4 sm:px-6"
-          aria-label="Layanan dan pilar UGUWOO KAA OWAA"
+          aria-label="Layanan dan pilar UGUWO KAA OWAA"
         >
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {FEATURE_CARDS.map((card) => {
@@ -720,7 +720,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Tentang UGUWOO KAA OWAA Section + 3 Cultural Photo Cards */}
+        {/* Tentang UGUWO KAA OWAA Section + 3 Cultural Photo Cards */}
         <section id="tentang" className="py-10 sm:py-14">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
@@ -729,13 +729,13 @@ export default function App() {
                 <div className="flex items-center gap-3">
                   <span className="h-[2px] w-8 bg-[#C9A24D]" aria-hidden="true" />
                   <h2 className="font-display text-xl sm:text-2xl font-bold text-[#16241D]">
-                    Tentang <span className="text-[#1D4A27]">UGUWOO KAA OWAA</span>
+                    Tentang <span className="text-[#1D4A27]">UGUWO KAA OWAA</span>
                   </h2>
                   <span className="h-[2px] flex-1 max-w-[48px] bg-[#C9A24D]" aria-hidden="true" />
                 </div>
 
                 <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#2F3F36]">
-                  UGUWOO KAA OWAA hadir sebagai ruang digital untuk membantu masyarakat Papua
+                  UGUWO KAA OWAA hadir sebagai ruang digital untuk membantu masyarakat Papua
                   memahami kehidupan keluarga, perkawinan, pendidikan anak, dan pentingnya
                   menjaga warisan budaya leluhur di tengah perkembangan zaman.
                 </p>
@@ -796,7 +796,7 @@ export default function App() {
               <PapuaFamilyCrest className="h-12 w-14 shrink-0" />
               <div>
                 <p className="font-display text-lg font-bold tracking-wide text-white">
-                  UGUWOO KAA OWAA
+                  UGUWO KAA OWAA
                 </p>
                 <p className="text-xs font-semibold tracking-wider text-[#F2C22B]">
                   RUMAH KELUARGA DARI PAPUA.
@@ -813,7 +813,7 @@ export default function App() {
           </div>
 
           <div className="mt-6 flex flex-col gap-2 border-t border-white/15 pt-4 text-xs text-[#C6D8CC] sm:flex-row sm:items-center sm:justify-between">
-            <p>Copyright © 2026 UGUWOO KAA OWAA.</p>
+            <p>Copyright © 2026 UGUWO KAA OWAA.</p>
             <div className="flex flex-wrap gap-4">
               <a href="#beranda" className="hover:text-white">
                 Beranda
