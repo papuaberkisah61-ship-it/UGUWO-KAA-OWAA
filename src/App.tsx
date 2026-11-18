@@ -18,6 +18,7 @@ import {
   HeartHandshake,
   HeartPulse,
   Home,
+  Images,
   Info,
   Languages,
   LayoutGrid,
@@ -26,6 +27,7 @@ import {
   Menu,
   MessageCircle,
   MessageSquareText,
+  Newspaper,
   Quote,
   Search,
   ShieldCheck,
@@ -49,7 +51,9 @@ import {
 import {
   FacebookIcon,
   InstagramIcon,
+  TikTokIcon,
   WhatsAppIcon,
+  YouTubeIcon,
 } from './components/SocialIcons';
 import {
   HeaderInstallButton,
@@ -63,24 +67,81 @@ type HubCategoryId =
   | 'budaya'
   | 'artikel'
   | 'cerita'
-  | 'direktori';
+  | 'direktori'
+  | 'galeri';
 
 const HERO_IMAGE_URL = '/src/assets/images/hero_papua_family_1794999656025.jpg';
 const GALLERY_IMAGES = [
   {
-    src: '/src/assets/images/culture_honai_house_1794999641110.jpg',
-    alt: 'Rumah adat Honai Papua di lembah pegunungan hijau',
-    caption: 'Honai & Rumah Keluarga',
+    src: '/src/assets/images/culture_papua_coast_1794999641973.jpg',
+    alt: 'Perahu tradisional Papua di perairan jernih danau dan pesisir kepulauan Papua',
+    caption: 'Pesisir & Danau Papua',
+    story:
+      'Perairan jernih Papua menjadi sumber penghidupan nelayan lokal dan mengajarkan nilai menjaga alam leluhur bagi anak cucu.',
+    prompt:
+      'Ceritakan nilai kearifan masyarakat pesisir dan danau di Papua dalam menjaga alam dan penghidupan keluarga.',
   },
   {
     src: '/src/assets/images/culture_papua_ceremony_1794999641793.jpg',
-    alt: 'Masyarakat Papua mengenakan busana adat tradisional penuh senyum',
+    alt: 'Masyarakat Papua mengenakan busana adat tradisional penuh senyum kebersamaan',
     caption: 'Adat & Kebersamaan',
+    story:
+      'Busana adat dan senyum persaudaraan mencerminkan semangat gotong royong serta kehormatan keluarga besar di Tanah Papua.',
+    prompt:
+      'Bagaimana menjaga nilai gotong royong dan kebersamaan adat Papua tetap hidup bagi generasi muda masa kini?',
   },
   {
-    src: '/src/assets/images/culture_papua_coast_1794999641973.jpg',
-    alt: 'Perahu tradisional Papua di perairan jernih pesisir kepulauan Papua',
-    caption: 'Pesisir & Warisan Alam',
+    src: '/src/assets/images/culture_honai_house_1794999641110.jpg',
+    alt: 'Rumah adat Honai Papua di lembah pegunungan hijau',
+    caption: 'Honai & Lembah Pegunungan',
+    story:
+      'Honai menjadi tempat berkumpulnya keluarga di sekitar tungku api yang hangat—tempat nasihat, dongeng, dan musyawarah diwariskan.',
+    prompt:
+      'Apa filosofi rumah Honai dalam mendidik anak dan menjaga kehangatan komunikasi keluarga Papua?',
+  },
+  {
+    src: '/src/assets/images/parenting_papua_family_1795005760301.jpg',
+    alt: 'Keluarga Papua duduk bersama membaca buku cerita dan merawat keharmonisan rumah tangga',
+    caption: 'Keluarga & Literasi Rumah',
+    story:
+      'Kebersamaan orang tua dan anak saat membaca dan belajar bersama di rumah menumbuhkan iman, literasi, serta kebanggaan jati diri Papua.',
+    prompt:
+      'Bagaimana membangun kebiasaan membaca dan dialog hangat orang tua bersama anak setiap hari di rumah?',
+  },
+];
+
+const NEWS_INFO_ITEMS = [
+  {
+    title: 'Keluarga Sehat, Papua Kuat',
+    category: 'Ketahanan Gizi & Kesehatan',
+    summary:
+      'Gerakan mengolah pangan lokal bergizi dari dapur rumah—sagu, ubi jalar, keladi, ikan kuah kuning, dan sayur gedi—untuk mencegah stunting dan menjaga daya tahan keluarga.',
+    prompt:
+      'Bagaimana langkah praktis keluarga Papua menerapkan gerakan Keluarga Sehat, Papua Kuat lewat pangan lokal?',
+  },
+  {
+    title: 'Pendidikan untuk Masa Depan',
+    category: 'Parenting & Literasi',
+    summary:
+      'Mendampingi anak sejak usia balita hingga dewasa muda melalui kebiasaan membaca, bahasa ibu, disiplin tanpa kekerasan, dan literasi digital.',
+    prompt:
+      'Apa langkah penting orang tua di Papua untuk menyiapkan pendidikan dan karakter anak menuju masa depan?',
+  },
+  {
+    title: 'Budaya Papua untuk Dunia',
+    category: 'Warisan Leluhur',
+    summary:
+      'Merawat dongeng nilai leluhur, filosofi Noken, dan tutur bahasa daerah sebagai identitas mulia yang membanggakan di pergaulan nasional maupun dunia.',
+    prompt:
+      'Bagaimana agar generasi muda Papua tetap bangga memperkenalkan budaya daerahnya di tingkat nasional dan dunia?',
+  },
+  {
+    title: 'Harmoni dalam Keberagaman',
+    category: 'Adat & Iman',
+    summary:
+      'Menghidupi falsafah Satu Tungku Tiga Batu dalam keluarga besar lintas suku dan keyakinan dengan saling menghormati serta mengedepankan musyawarah.',
+    prompt:
+      'Bagaimana menjaga harmoni dan saling menghormati dalam keluarga lintas suku maupun keberagaman di Tanah Papua?',
   },
 ];
 
@@ -132,6 +193,13 @@ const FEATURE_CARDS: {
     subtitle: '7 Wilayah Adat Papua',
     topic: 'Lintas Suku',
     defaultPrompt: 'Bagaimana cara menyatukan dua tradisi berbeda dalam perkawinan lintas suku Papua?',
+  },
+  {
+    id: 'galeri',
+    title: 'Galeri Papua',
+    subtitle: 'Potret alam, adat & keluarga',
+    topic: 'Bahasa & Budaya',
+    defaultPrompt: 'Ceritakan kisah keindahan alam, budaya, dan kehidupan keluarga di berbagai daerah Papua.',
   },
 ];
 
@@ -623,7 +691,17 @@ const ANCESTRAL_TALES = [
 ];
 
 export default function App() {
-  const [activeNav, setActiveNav] = useState<'beranda' | 'konsultasi' | 'budaya' | 'tentang'>('beranda');
+  const [activeNav, setActiveNav] = useState<
+    | 'beranda'
+    | 'keluarga'
+    | 'pendidikan'
+    | 'budaya'
+    | 'kesehatan'
+    | 'cerita'
+    | 'galeri'
+    | 'konsultasi'
+    | 'tentang'
+  >('beranda');
   const [activeHub, setActiveHub] = useState<HubCategoryId>('budaya');
   const [selectedExpressionIdx, setSelectedExpressionIdx] = useState(0);
   const [selectedRegionIdx, setSelectedRegionIdx] = useState(0);
@@ -631,6 +709,8 @@ export default function App() {
   const [activeTaleIdx, setActiveTaleIdx] = useState(0);
   const [selectedParentingAge, setSelectedParentingAge] = useState<string>('Semua Usia');
   const [showAboutDetail, setShowAboutDetail] = useState(false);
+  const [selectedGalleryPhotoIdx, setSelectedGalleryPhotoIdx] = useState<number | null>(null);
+  const [newsModalOpen, setNewsModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -750,6 +830,8 @@ export default function App() {
         return <MessageCircle className="h-8 w-8 text-[#1D4A27]" strokeWidth={1.75} aria-hidden="true" />;
       case 'direktori':
         return <MapPin className="h-8 w-8 text-[#1D4A27]" strokeWidth={1.75} aria-hidden="true" />;
+      case 'galeri':
+        return <Images className="h-8 w-8 text-[#1D4A27]" strokeWidth={1.75} aria-hidden="true" />;
     }
   };
 
@@ -864,6 +946,27 @@ export default function App() {
           hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
         },
       })),
+      ...NEWS_INFO_ITEMS.map((news, idx) => ({
+        id: `news-${idx}`,
+        category: 'Artikel & Gizi' as const,
+        title: news.title,
+        subtitle: news.summary,
+        keywords: `${news.title} ${news.category} ${news.summary} berita info`,
+        onSelect: () => {
+          document.getElementById('berita-info')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+          setNewsModalOpen(true);
+        },
+      })),
+      {
+        id: 'galeri-kisah-papua',
+        category: 'Artikel & Gizi' as const,
+        title: 'Kisah dari Tanah Papua (Galeri Foto)',
+        subtitle: 'Potret alam pesisir, adat kebersamaan, Honai pegunungan, dan literasi keluarga.',
+        keywords: 'galeri papua foto kisah tanah papua honai pesisir upacara adat',
+        onSelect: () => {
+          document.getElementById('galeri-papua')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
       {
         id: 'app-install',
         category: 'Topik Konsultasi' as const,
@@ -937,61 +1040,107 @@ export default function App() {
             </div>
           </a>
 
-          {/* Navigation Links */}
+          {/* 7-Item Primary Navigation Links Matching Visual Blueprint */}
           <nav
             aria-label="Navigasi utama"
-            className="hidden md:flex items-center gap-1 xl:gap-1.5"
+            className="hidden lg:flex items-center gap-0.5 xl:gap-1"
           >
             <a
               href="#beranda"
               onClick={() => setActiveNav('beranda')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 activeNav === 'beranda'
                   ? 'bg-[#F2C22B] text-[#16241D]'
                   : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Home className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+              <Home className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
               <span>Beranda</span>
             </a>
 
             <button
               type="button"
-              onClick={() => scrollToChat(true)}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                activeNav === 'konsultasi'
+              onClick={() => {
+                setActiveNav('keluarga');
+                setActiveHub('perkawinan');
+                hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+              }}
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                activeNav === 'keluarga'
                   ? 'bg-[#F2C22B] text-[#16241D]'
                   : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <MessageCircle className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
-              <span>Konsultasi AI</span>
+              <Users className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
+              <span>Keluarga</span>
             </button>
 
             <a
+              href="#tumbuh-kembang-anak"
+              onClick={() => setActiveNav('pendidikan')}
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 ${
+                activeNav === 'pendidikan'
+                  ? 'bg-[#F2C22B] text-[#16241D]'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <GraduationCap className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
+              <span>Pendidikan</span>
+            </a>
+
+            <a
               href="#budaya-hub"
-              onClick={() => setActiveNav('budaya')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
+              onClick={() => {
+                setActiveNav('budaya');
+                setActiveHub('budaya');
+              }}
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 ${
                 activeNav === 'budaya'
                   ? 'bg-[#F2C22B] text-[#16241D]'
                   : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Feather className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
-              <span>Budaya Papua</span>
+              <Feather className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
+              <span>Budaya</span>
             </a>
 
             <a
-              href="#tentang"
-              onClick={() => setActiveNav('tentang')}
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                activeNav === 'tentang'
+              href="#pangan-lokal"
+              onClick={() => setActiveNav('kesehatan')}
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 ${
+                activeNav === 'kesehatan'
                   ? 'bg-[#F2C22B] text-[#16241D]'
                   : 'text-white/90 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Info className="hidden xl:inline h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
-              <span>Tentang Kami</span>
+              <HeartPulse className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
+              <span>Kesehatan</span>
+            </a>
+
+            <a
+              href="#dongeng-leluhur"
+              onClick={() => setActiveNav('cerita')}
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 ${
+                activeNav === 'cerita'
+                  ? 'bg-[#F2C22B] text-[#16241D]'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <MessageCircle className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
+              <span>Cerita Papua</span>
+            </a>
+
+            <a
+              href="#galeri-papua"
+              onClick={() => setActiveNav('galeri')}
+              className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 ${
+                activeNav === 'galeri'
+                  ? 'bg-[#F2C22B] text-[#16241D]'
+                  : 'text-white/90 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              <Images className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
+              <span>Galeri</span>
             </a>
           </nav>
 
@@ -1003,7 +1152,7 @@ export default function App() {
                 <label htmlFor="header-global-search" className="sr-only">
                   Cari topik konsultasi, artikel, atau dongeng leluhur
                 </label>
-                <div className="flex h-9 w-48 xl:w-64 items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3 transition-colors focus-within:border-[#F2C22B]">
+                <div className="flex h-9 w-40 xl:w-48 items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3 transition-colors focus-within:border-[#F2C22B]">
                   <Search className="h-3.5 w-3.5 shrink-0 text-[#F2C22B]" aria-hidden="true" />
                   <input
                     id="header-global-search"
@@ -1014,7 +1163,7 @@ export default function App() {
                       setSearchQuery(e.target.value);
                       setSearchFocused(true);
                     }}
-                    placeholder="Cari topik, artikel, dongeng..."
+                    placeholder="Cari di sini..."
                     className="w-full bg-transparent text-xs text-white placeholder:text-white/60 focus:outline-none"
                   />
                   {searchQuery && (
@@ -1096,15 +1245,13 @@ export default function App() {
               <Search className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
             </button>
 
-            <HeaderInstallButton className="hidden xl:inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-[#F2C22B] px-3.5 py-1.5 text-xs font-bold text-[#16241D] transition-colors hover:bg-[#E0B11F] whitespace-nowrap shrink-0 cursor-pointer" />
-
             <button
               type="button"
               onClick={() => setProfileModalOpen(true)}
               className="hidden sm:inline-flex min-h-[38px] items-center gap-1.5 rounded-full border border-white/35 bg-[#12301B] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:border-[#F2C22B] hover:bg-[#1E4A29] whitespace-nowrap shrink-0 cursor-pointer"
             >
               <User className="h-3.5 w-3.5 text-[#F2C22B]" strokeWidth={2} aria-hidden="true" />
-              <span className="max-w-[100px] truncate">
+              <span className="max-w-[90px] truncate">
                 {userProfile.name ? userProfile.name : 'Masuk'}
               </span>
             </button>
@@ -1118,7 +1265,7 @@ export default function App() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
               aria-label={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
-              className="inline-flex md:hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="inline-flex lg:hidden min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               {mobileMenuOpen ? (
                 <X className="h-5 w-5" aria-hidden="true" />
@@ -1200,21 +1347,21 @@ export default function App() {
           </div>
         )}
 
-        {/* Mobile Drawer */}
+        {/* Mobile & Tablet Drawer */}
         {mobileMenuOpen && (
           <nav
             id="mobile-navigation"
             aria-label="Navigasi seluler"
-            className="border-t border-white/15 bg-[#163B22] px-4 py-3 md:hidden"
+            className="border-t border-white/15 bg-[#163B22] px-4 py-3 lg:hidden"
           >
-            <div className="flex flex-col gap-1">
+            <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
               <a
                 href="#beranda"
                 onClick={() => {
                   setActiveNav('beranda');
                   setMobileMenuOpen(false);
                 }}
-                className="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
               >
                 <Home className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
                 <span>Beranda</span>
@@ -1223,23 +1370,70 @@ export default function App() {
                 type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  scrollToChat(true);
+                  setActiveNav('keluarga');
+                  setActiveHub('perkawinan');
+                  hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
                 }}
-                className="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-left text-sm font-medium text-white hover:bg-white/10"
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-left text-sm font-medium text-white hover:bg-white/10"
               >
-                <MessageCircle className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
-                <span>Konsultasi AI</span>
+                <Users className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+                <span>Keluarga</span>
               </button>
+              <a
+                href="#tumbuh-kembang-anak"
+                onClick={() => {
+                  setActiveNav('pendidikan');
+                  setMobileMenuOpen(false);
+                }}
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+              >
+                <GraduationCap className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+                <span>Pendidikan</span>
+              </a>
               <a
                 href="#budaya-hub"
                 onClick={() => {
                   setActiveNav('budaya');
+                  setActiveHub('budaya');
                   setMobileMenuOpen(false);
                 }}
-                className="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
               >
                 <Feather className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
-                <span>Budaya Papua</span>
+                <span>Budaya</span>
+              </a>
+              <a
+                href="#pangan-lokal"
+                onClick={() => {
+                  setActiveNav('kesehatan');
+                  setMobileMenuOpen(false);
+                }}
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+              >
+                <HeartPulse className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+                <span>Kesehatan</span>
+              </a>
+              <a
+                href="#dongeng-leluhur"
+                onClick={() => {
+                  setActiveNav('cerita');
+                  setMobileMenuOpen(false);
+                }}
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+              >
+                <MessageCircle className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+                <span>Cerita Papua</span>
+              </a>
+              <a
+                href="#galeri-papua"
+                onClick={() => {
+                  setActiveNav('galeri');
+                  setMobileMenuOpen(false);
+                }}
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+              >
+                <Images className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+                <span>Galeri</span>
               </a>
               <a
                 href="#tentang"
@@ -1247,28 +1441,28 @@ export default function App() {
                   setActiveNav('tentang');
                   setMobileMenuOpen(false);
                 }}
-                className="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
+                className="flex min-h-[42px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-white hover:bg-white/10"
               >
                 <Info className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
                 <span>Tentang Kami</span>
               </a>
-              <div className="mt-1 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <HeaderInstallButton
-                  onClickBeforeOpen={() => setMobileMenuOpen(false)}
-                  className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[#F2C22B]/70 bg-[#12301B] px-4 py-2 text-sm font-semibold text-[#F2C22B] hover:bg-[#1E4A29] cursor-pointer"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setProfileModalOpen(true);
-                  }}
-                  className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-[#F2C22B] px-4 py-2 text-sm font-semibold text-[#16241D]"
-                >
-                  <User className="h-4 w-4" aria-hidden="true" />
-                  <span>{userProfile.name ? `Profil: ${userProfile.name}` : 'Masuk / Profil'}</span>
-                </button>
-              </div>
+            </div>
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <HeaderInstallButton
+                onClickBeforeOpen={() => setMobileMenuOpen(false)}
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[#F2C22B]/70 bg-[#12301B] px-4 py-2 text-sm font-semibold text-[#F2C22B] hover:bg-[#1E4A29] cursor-pointer"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setProfileModalOpen(true);
+                }}
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-[#F2C22B] px-4 py-2 text-sm font-semibold text-[#16241D]"
+              >
+                <User className="h-4 w-4" aria-hidden="true" />
+                <span>{userProfile.name ? `Profil: ${userProfile.name}` : 'Masuk / Profil'}</span>
+              </button>
             </div>
           </nav>
         )}
@@ -1314,15 +1508,17 @@ export default function App() {
                   budaya, dan masa depan anak-anak Papua.
                 </p>
 
-                <div className="mt-6">
+                <div className="mt-6 flex flex-wrap items-center gap-3">
                   <button
                     type="button"
                     onClick={() => scrollToChat(true)}
                     className="inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full bg-[#F2C22B] px-7 py-3 text-sm font-bold text-[#16241D] shadow-md transition-colors hover:bg-[#E0B11F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white whitespace-nowrap shrink-0 cursor-pointer"
                   >
-                    <span>Mulai Konsultasi AI</span>
+                    <Home className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
+                    <span>Mulai Konsultasi Keluarga</span>
                     <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
                   </button>
+                  <HeaderInstallButton className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/35 bg-[#12301B]/80 px-5 py-3 text-xs font-semibold text-white backdrop-blur-xs transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B] whitespace-nowrap shrink-0 cursor-pointer" />
                 </div>
               </div>
 
@@ -1342,14 +1538,14 @@ export default function App() {
           </div>
         </section>
 
-        {/* 6-Card Feature Strip Overlapping Bottom Edge of Hero */}
+        {/* 7-Card Feature Strip Overlapping Bottom Edge of Hero */}
         <section
           id="budaya-hub"
           ref={hubRef}
           className="relative z-20 mx-auto -mt-7 sm:-mt-9 max-w-6xl px-4 sm:px-6"
           aria-label="Layanan dan pilar UGUWO KAA OWAA"
         >
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
             {FEATURE_CARDS.map((card) => {
               const isActive = activeHub === card.id;
               return (
@@ -1357,7 +1553,7 @@ export default function App() {
                   key={card.id}
                   type="button"
                   onClick={() => handleSelectFeatureCard(card.id)}
-                  className={`flex flex-col items-center justify-center rounded-xl border px-3 py-4 text-center shadow-sm transition-all cursor-pointer ${
+                  className={`flex flex-col items-center justify-center rounded-xl border px-2.5 py-4 text-center shadow-sm transition-all cursor-pointer ${
                     isActive
                       ? 'border-[#1D4A27] bg-white ring-2 ring-[#1D4A27]/15'
                       : 'border-[#E2DCCF] bg-white hover:border-[#1D4A27]/45'
@@ -1503,6 +1699,50 @@ export default function App() {
                         <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                       </button>
                     </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeHub === 'galeri' && (
+              <div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="font-display text-lg font-bold text-[#16241D]">
+                      Galeri Papua · Kisah Alam, Adat &amp; Keluarga
+                    </h2>
+                    <p className="mt-1 text-xs sm:text-sm text-[#425249]">
+                      Klik foto di bawah untuk melihat kisah budaya atau langsung berdiskusi dengan Sahabat AI.
+                    </p>
+                  </div>
+                  <a
+                    href="#galeri-papua"
+                    className="inline-flex min-h-[38px] items-center gap-1.5 self-start rounded-full border border-[#1D4A27] px-4 py-1.5 text-xs font-semibold text-[#1D4A27] hover:bg-[#1D4A27] hover:text-white whitespace-nowrap shrink-0"
+                  >
+                    <span>Lihat Galeri Lengkap</span>
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </a>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {GALLERY_IMAGES.map((img, idx) => (
+                    <button
+                      key={img.src}
+                      type="button"
+                      onClick={() => setSelectedGalleryPhotoIdx(idx)}
+                      className="group overflow-hidden rounded-xl border border-[#EAE4D8] bg-[#FAF8F4] text-left transition-all hover:border-[#1D4A27] cursor-pointer"
+                    >
+                      <div className="aspect-[4/3] overflow-hidden">
+                        <img
+                          src={img.src}
+                          alt={img.alt}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                      <p className="px-3 py-2 font-display text-xs font-bold text-[#16241D]">
+                        {img.caption}
+                      </p>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -2322,65 +2562,148 @@ export default function App() {
           </div>
         </section>
 
-        {/* Tentang UGUWO KAA OWAA Section + 3 Cultural Photo Cards */}
+        {/* 3-Column Bottom Showcase: Tentang Kami | Kisah dari Tanah Papua | Berita & Info */}
         <section id="tentang" className="py-10 sm:py-14">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
-              {/* Left Text Column */}
-              <div className="lg:col-span-5">
-                <div className="flex items-center gap-3">
-                  <span className="h-[2px] w-8 bg-[#C9A24D]" aria-hidden="true" />
-                  <h2 className="font-display text-xl sm:text-2xl font-bold text-[#16241D]">
-                    Tentang <span className="text-[#1D4A27]">UGUWO KAA OWAA</span>
-                  </h2>
-                  <span className="h-[2px] flex-1 max-w-[48px] bg-[#C9A24D]" aria-hidden="true" />
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+              {/* Column 1: Tentang Kami */}
+              <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E2DCCF] bg-white shadow-xs lg:col-span-5">
+                <div>
+                  <div className="flex items-center gap-2.5 border-b border-[#EFEAE0] bg-[#FAF4E4] px-5 py-3">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1D4A27] text-white">
+                      <Home className="h-3.5 w-3.5" aria-hidden="true" />
+                    </div>
+                    <h2 className="font-display text-base font-bold text-[#16241D]">
+                      Tentang Kami
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-12 sm:items-center">
+                    <div className="sm:col-span-7">
+                      <p className="text-xs sm:text-sm leading-relaxed text-[#2F3F36]">
+                        UGUWO KAA OWAA hadir sebagai ruang digital untuk membantu masyarakat Papua
+                        memahami kehidupan keluarga, perkawinan, pendidikan anak, dan pentingnya
+                        menjaga warisan budaya leluhur di tengah perkembangan zaman.
+                      </p>
+                    </div>
+                    <div className="sm:col-span-5">
+                      <img
+                        src="/src/assets/images/culture_honai_house_1794999641110.jpg"
+                        alt="Rumah adat Honai Papua di lembah pegunungan"
+                        loading="lazy"
+                        className="h-32 w-full rounded-xl border border-[#E2DCCF] object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {showAboutDetail && (
+                    <div className="mx-5 mb-4 rounded-xl border border-[#DFD8CA] bg-[#FAF8F4] p-3.5 text-xs leading-relaxed text-[#425249]">
+                      Platform ini menggabungkan nilai kearifan lokal tujuh wilayah adat Papua,
+                      penghormatan penuh terhadap iman dan ajaran agama, serta pendampingan AI yang
+                      ramah berbahasa Indonesia dan dialek Papua agar setiap keluarga muda maupun
+                      orang tua memiliki teman diskusi yang tulus.
+                    </div>
+                  )}
                 </div>
 
-                <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#2F3F36]">
-                  UGUWO KAA OWAA hadir sebagai ruang digital untuk membantu masyarakat Papua
-                  memahami kehidupan keluarga, perkawinan, pendidikan anak, dan pentingnya
-                  menjaga warisan budaya leluhur di tengah perkembangan zaman.
-                </p>
-
-                {showAboutDetail && (
-                  <div className="mt-4 rounded-xl border border-[#DFD8CA] bg-white p-4 text-xs sm:text-sm leading-relaxed text-[#425249]">
-                    Platform ini menggabungkan nilai kearifan lokal tujuh wilayah adat Papua,
-                    penghormatan penuh terhadap iman dan ajaran agama, serta pendampingan AI yang
-                    ramah berbahasa Indonesia dan dialek Papua agar setiap keluarga muda maupun
-                    orang tua memiliki teman diskusi yang tulus.
-                  </div>
-                )}
-
-                <div className="mt-6">
+                <div className="px-5 pb-5">
                   <button
                     type="button"
                     onClick={() => setShowAboutDetail((prev) => !prev)}
-                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#1D4A27] px-6 py-2.5 text-xs sm:text-sm font-semibold text-white transition-colors hover:bg-[#265D33] cursor-pointer"
+                    className="inline-flex min-h-[40px] items-center justify-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] cursor-pointer"
                   >
                     <span>{showAboutDetail ? 'Tutup Penjelasan' : 'Pelajari Lebih Lanjut'}</span>
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
                 </div>
               </div>
 
-              {/* Right 3 Square Cultural Photography Cards */}
-              <div className="lg:col-span-7">
-                <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                  {GALLERY_IMAGES.map((img) => (
-                    <figure
-                      key={img.src}
-                      className="group relative aspect-square overflow-hidden rounded-xl border border-[#E2DCCF] bg-[#E8E2D4] shadow-xs"
-                    >
-                      <img
-                        src={img.src}
-                        alt={img.alt}
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      <figcaption className="sr-only">{img.caption}</figcaption>
-                    </figure>
-                  ))}
+              {/* Column 2: Kisah dari Tanah Papua (4 Photo Gallery) */}
+              <div
+                id="galeri-papua"
+                className="flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E2DCCF] bg-white shadow-xs lg:col-span-4"
+              >
+                <div>
+                  <div className="flex items-center gap-2.5 border-b border-[#EFEAE0] bg-[#FAF4E4] px-5 py-3">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#C9A24D] text-[#16241D]">
+                      <Feather className="h-3.5 w-3.5" aria-hidden="true" />
+                    </div>
+                    <h2 className="font-display text-base font-bold text-[#16241D]">
+                      Kisah dari Tanah Papua
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 p-4 sm:p-5">
+                    {GALLERY_IMAGES.map((img, idx) => (
+                      <button
+                        key={img.src}
+                        type="button"
+                        onClick={() => setSelectedGalleryPhotoIdx(idx)}
+                        className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-[#E2DCCF] bg-[#E8E2D4] text-left shadow-xs cursor-pointer"
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.alt}
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent px-2.5 py-1.5 text-[11px] font-semibold text-white">
+                          {img.caption}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="px-5 pb-4 text-[11px] text-[#5E6D64]">
+                  Klik salah satu potret untuk membaca kisah budaya &amp; berdiskusi dengan AI.
+                </p>
+              </div>
+
+              {/* Column 3: Berita & Info */}
+              <div
+                id="berita-info"
+                className="flex flex-col justify-between overflow-hidden rounded-2xl border border-[#E2DCCF] bg-white shadow-xs lg:col-span-3"
+              >
+                <div>
+                  <div className="flex items-center gap-2.5 border-b border-[#EFEAE0] bg-[#FAF4E4] px-5 py-3">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1D4A27] text-white">
+                      <Newspaper className="h-3.5 w-3.5" aria-hidden="true" />
+                    </div>
+                    <h2 className="font-display text-base font-bold text-[#16241D]">
+                      Berita &amp; Info
+                    </h2>
+                  </div>
+
+                  <ul className="divide-y divide-[#F3EFE7] px-5 py-2">
+                    {NEWS_INFO_ITEMS.map((item) => (
+                      <li key={item.title}>
+                        <button
+                          type="button"
+                          onClick={() => setNewsModalOpen(true)}
+                          className="flex w-full items-center gap-2.5 py-2.5 text-left text-xs font-semibold text-[#16241D] transition-colors hover:text-[#1D4A27] cursor-pointer"
+                        >
+                          <CheckCircle2
+                            className="h-4 w-4 shrink-0 text-[#1D4A27]"
+                            aria-hidden="true"
+                          />
+                          <span>{item.title}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-5 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setNewsModalOpen(true)}
+                    className="inline-flex min-h-[40px] w-full items-center justify-center gap-2 rounded-full bg-[#F2C22B] px-5 py-2 text-xs font-bold text-[#16241D] transition-colors hover:bg-[#E0B11F] cursor-pointer"
+                  >
+                    <span>Lihat Semua Berita</span>
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
                 </div>
               </div>
             </div>
@@ -2395,8 +2718,8 @@ export default function App() {
         <PapuaCarvingCorner className="pointer-events-none absolute right-0 bottom-0 h-28 w-52" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3.5">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center">
+            <div className="flex items-center gap-3.5 lg:col-span-4">
               <PapuaFamilyCrest className="h-12 w-14 shrink-0" />
               <div>
                 <p className="font-display text-lg font-bold tracking-wide text-white">
@@ -2408,21 +2731,27 @@ export default function App() {
               </div>
             </div>
 
-            <div className="border-t border-white/20 pt-4 md:border-t-0 md:border-l md:pl-8 md:pt-0">
-              <p className="text-sm sm:text-base font-medium italic leading-relaxed text-[#F5F2EB]">
+            <div className="border-t border-white/20 pt-4 lg:col-span-4 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0">
+              <p className="text-sm font-medium italic leading-relaxed text-[#F5F2EB]">
                 &ldquo;Adat Dijaga, Agama Dihormati,
                 <br className="hidden sm:inline" /> Keluarga Dibangun, Generasi Dilindungi.&rdquo;
+              </p>
+            </div>
+
+            <div className="border-t border-white/20 pt-4 lg:col-span-4 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0">
+              <p className="text-sm font-semibold italic leading-relaxed text-[#F2C22B]">
+                &ldquo;Bersama Membangun Keluarga Papua yang Sehat, Damai dan Sejahtera&rdquo;
               </p>
             </div>
           </div>
 
           <div className="mt-6 flex flex-col gap-5 border-t border-white/15 pt-5 md:flex-row md:items-center md:justify-between">
-            {/* Social Media Section */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            {/* Social Media Section: WhatsApp, Facebook, YouTube, Instagram, TikTok */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#F2C22B]">
-                Terhubung & Bagikan
+                Terhubung &amp; Bagikan
               </span>
-              <div className="flex items-center gap-2.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(
                     'Mari belajar dan berkonsultasi keluarga bersama UGUWO KAA OWAA – Rumah Keluarga dari Papua: ' +
@@ -2431,7 +2760,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Bagikan melalui WhatsApp"
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3.5 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/25 bg-[#12301B] px-3 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
                 >
                   <WhatsAppIcon className="h-4 w-4 shrink-0" />
                   <span>WhatsApp</span>
@@ -2444,10 +2773,21 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Bagikan ke Facebook"
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3.5 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/25 bg-[#12301B] px-3 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
                 >
                   <FacebookIcon className="h-4 w-4 shrink-0" />
                   <span>Facebook</span>
+                </a>
+
+                <a
+                  href="https://www.youtube.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Kunjungi YouTube UGUWO KAA OWAA"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/25 bg-[#12301B] px-3 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                >
+                  <YouTubeIcon className="h-4 w-4 shrink-0" />
+                  <span>YouTube</span>
                 </a>
 
                 <a
@@ -2455,10 +2795,21 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Kunjungi Instagram UGUWO KAA OWAA"
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-full border border-white/25 bg-[#12301B] px-3.5 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/25 bg-[#12301B] px-3 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
                 >
                   <InstagramIcon className="h-4 w-4 shrink-0" />
                   <span>Instagram</span>
+                </a>
+
+                <a
+                  href="https://www.tiktok.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Kunjungi TikTok UGUWO KAA OWAA"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/25 bg-[#12301B] px-3 py-1.5 text-xs font-medium text-[#F5F2EB] transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B]"
+                >
+                  <TikTokIcon className="h-4 w-4 shrink-0" />
+                  <span>TikTok</span>
                 </a>
               </div>
             </div>
@@ -2571,6 +2922,136 @@ export default function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Galeri Foto Kisah dari Tanah Papua Modal */}
+      {selectedGalleryPhotoIdx !== null && (() => {
+        const photo = GALLERY_IMAGES[selectedGalleryPhotoIdx];
+        return (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-xs"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gallery-modal-title"
+          >
+            <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#DFD8CA] bg-white shadow-2xl">
+              <div className="relative aspect-[16/10] bg-[#12301B]">
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="h-full w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setSelectedGalleryPhotoIdx(null)}
+                  aria-label="Tutup galeri"
+                  className="absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/55 text-white hover:bg-black/75 cursor-pointer"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+              <div className="p-5 sm:p-6">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                  Kisah dari Tanah Papua
+                </span>
+                <h3
+                  id="gallery-modal-title"
+                  className="mt-0.5 font-display text-lg font-bold text-[#16241D]"
+                >
+                  {photo.caption}
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                  {photo.story}
+                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const p = photo.prompt;
+                      setSelectedGalleryPhotoIdx(null);
+                      handleAskAI(p, 'Bahasa & Budaya');
+                    }}
+                    className="inline-flex min-h-[40px] items-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white hover:bg-[#265D33] cursor-pointer"
+                  >
+                    <span>Tanya Sahabat AI</span>
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedGalleryPhotoIdx(null)}
+                    className="min-h-[40px] rounded-full border border-[#DFD8CA] px-4 py-2 text-xs font-semibold text-[#425249] hover:bg-[#FAF8F4] cursor-pointer"
+                  >
+                    Tutup
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Berita & Info Keluarga Papua Modal */}
+      {newsModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-xs"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="news-modal-title"
+        >
+          <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[#DFD8CA] bg-[#FAF8F4] p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-[#EFEAE0] pb-4">
+              <div>
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#5C3D2E]">
+                  UGUWO KAA OWAA · Informasi Terkini
+                </span>
+                <h2
+                  id="news-modal-title"
+                  className="mt-0.5 font-display text-lg sm:text-xl font-bold text-[#16241D]"
+                >
+                  Berita &amp; Info Keluarga Papua
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNewsModalOpen(false)}
+                aria-label="Tutup berita"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-[#5E6D64] hover:bg-[#EFEAE0] cursor-pointer"
+              >
+                <X className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              {NEWS_INFO_ITEMS.map((item) => (
+                <article
+                  key={item.title}
+                  className="rounded-xl border border-[#E2DCCF] bg-white p-4 sm:p-5"
+                >
+                  <span className="text-[11px] font-semibold text-[#5C3D2E]">
+                    {item.category}
+                  </span>
+                  <h3 className="mt-0.5 font-display text-base font-bold text-[#16241D]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-[#425249]">
+                    {item.summary}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewsModalOpen(false);
+                      handleAskAI(item.prompt, 'Keluarga Modern');
+                    }}
+                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#1D4A27] hover:underline cursor-pointer"
+                  >
+                    <span>Diskusikan dengan Sahabat AI</span>
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       )}
