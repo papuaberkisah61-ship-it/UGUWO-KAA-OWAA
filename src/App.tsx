@@ -51,6 +51,11 @@ import {
   InstagramIcon,
   WhatsAppIcon,
 } from './components/SocialIcons';
+import {
+  HeaderInstallButton,
+  MobileAppSection,
+  OfflineIndicator,
+} from './components/PWAInstallBanner';
 
 type HubCategoryId =
   | 'perkawinan'
@@ -859,6 +864,16 @@ export default function App() {
           hubRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
         },
       })),
+      {
+        id: 'app-install',
+        category: 'Topik Konsultasi' as const,
+        title: 'Pasang Aplikasi UGUWO KAA OWAA di HP',
+        subtitle: 'Instal aplikasi Android / iOS (PWA) dan panduan info APK.',
+        keywords: 'download apk unduh aplikasi pasang app android iphone ios pwa install hp',
+        onSelect: () => {
+          document.getElementById('unduh-aplikasi')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
     ];
     return items;
   }, []);
@@ -1081,6 +1096,8 @@ export default function App() {
               <Search className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
             </button>
 
+            <HeaderInstallButton className="hidden xl:inline-flex min-h-[38px] items-center gap-1.5 rounded-full bg-[#F2C22B] px-3.5 py-1.5 text-xs font-bold text-[#16241D] transition-colors hover:bg-[#E0B11F] whitespace-nowrap shrink-0 cursor-pointer" />
+
             <button
               type="button"
               onClick={() => setProfileModalOpen(true)}
@@ -1235,17 +1252,23 @@ export default function App() {
                 <Info className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
                 <span>Tentang Kami</span>
               </a>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setProfileModalOpen(true);
-                }}
-                className="mt-1 flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#F2C22B] px-4 py-2 text-sm font-semibold text-[#16241D]"
-              >
-                <User className="h-4 w-4" aria-hidden="true" />
-                <span>{userProfile.name ? `Profil: ${userProfile.name}` : 'Masuk / Profil'}</span>
-              </button>
+              <div className="mt-1 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <HeaderInstallButton
+                  onClickBeforeOpen={() => setMobileMenuOpen(false)}
+                  className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-[#F2C22B]/70 bg-[#12301B] px-4 py-2 text-sm font-semibold text-[#F2C22B] hover:bg-[#1E4A29] cursor-pointer"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setProfileModalOpen(true);
+                  }}
+                  className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-[#F2C22B] px-4 py-2 text-sm font-semibold text-[#16241D]"
+                >
+                  <User className="h-4 w-4" aria-hidden="true" />
+                  <span>{userProfile.name ? `Profil: ${userProfile.name}` : 'Masuk / Profil'}</span>
+                </button>
+              </div>
             </div>
           </nav>
         )}
@@ -2363,6 +2386,8 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        <MobileAppSection />
       </main>
 
       {/* Footer: Deep Forest Green with Papuan Carving Accent */}
@@ -2451,6 +2476,9 @@ export default function App() {
                 </a>
                 <a href="#tentang" className="hover:text-white">
                   Tentang Kami
+                </a>
+                <a href="#unduh-aplikasi" className="hover:text-white">
+                  Pasang App
                 </a>
               </div>
               <p className="text-[#C6D8CC]">Copyright © 2026 UGUWO KAA OWAA.</p>
@@ -2546,6 +2574,8 @@ export default function App() {
           </div>
         </div>
       )}
+
+      <OfflineIndicator />
     </div>
   );
 }
