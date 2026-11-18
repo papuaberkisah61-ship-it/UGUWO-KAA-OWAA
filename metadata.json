@@ -1,0 +1,6 @@
+{
+  "name": "UGUWOO KAA OWAA – Rumah Keluarga dari Papua",
+  "description": "Ruang belajar dan konsultasi keluarga modern dari Papua yang menjaga adat, menghormati agama, dan membangun generasi bersama Sahabat Keluarga Papua AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
