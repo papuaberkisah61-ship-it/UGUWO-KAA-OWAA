@@ -13,6 +13,7 @@ import {
   CalendarDays,
   CalendarPlus,
   CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -69,7 +70,22 @@ import {
   MobileAppSection,
   OfflineIndicator,
 } from './components/PWAInstallBanner';
-import {GuidebookSection} from './components/GuidebookSection';
+import {
+  GuidebookSection,
+  downloadAllChaptersOfflineHtml,
+  downloadChapterPdfById,
+} from './components/GuidebookSection';
+import {DewasaMudaModule} from './components/DewasaMudaModule';
+import type {DewasaMudaToolId} from './components/DewasaMudaTools';
+import {
+  BAB07_AGE_MAP,
+  BAB07_AI_CARDS,
+  BAB07_LESSONS,
+  BAB07_SUBMENUS,
+  type Bab07AgeBand,
+  type Bab07Category,
+  type Bab07SubmenuItem,
+} from './data/bab07DewasaMudaData';
 
 type HubCategoryId =
   | 'perkawinan'
@@ -1831,6 +1847,7 @@ export default function App() {
     | 'beranda'
     | 'keluarga'
     | 'pendidikan'
+    | 'dewasa-muda'
     | 'budaya'
     | 'kesehatan'
     | 'cerita'
@@ -1844,6 +1861,14 @@ export default function App() {
   const [activeStoryIdx, setActiveStoryIdx] = useState(0);
   const [activeTaleIdx, setActiveTaleIdx] = useState(0);
   const [selectedParentingAge, setSelectedParentingAge] = useState<string>('Semua Usia');
+  const [bab07AgeBand, setBab07AgeBand] = useState<Bab07AgeBand['id']>('18-21');
+  const [bab07CategoryFilter, setBab07CategoryFilter] = useState<Bab07Category | 'Semua'>('Semua');
+  const [bab07Tool, setBab07Tool] = useState<DewasaMudaToolId>('penghasilan');
+  const [dewasaMudaDropdownOpen, setDewasaMudaDropdownOpen] = useState(false);
+  const [guidebookReaderReq, setGuidebookReaderReq] = useState<{
+    chapterId: string;
+    nonce: number;
+  } | null>(null);
   const [showAboutDetail, setShowAboutDetail] = useState(false);
   const [selectedGalleryPhotoIdx, setSelectedGalleryPhotoIdx] = useState<number | null>(null);
   const [newsModalOpen, setNewsModalOpen] = useState(false);
@@ -1880,6 +1905,7 @@ export default function App() {
   const heroChatRef = useRef<HTMLDivElement | null>(null);
   const hubRef = useRef<HTMLElement | null>(null);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
+  const dewasaMudaMenuRef = useRef<HTMLDivElement | null>(null);
   const mobileSearchInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -1895,11 +1921,18 @@ export default function App() {
       ) {
         setSearchFocused(false);
       }
+      if (
+        dewasaMudaMenuRef.current &&
+        !dewasaMudaMenuRef.current.contains(event.target as Node)
+      ) {
+        setDewasaMudaDropdownOpen(false);
+      }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setSearchFocused(false);
         setMobileSearchOpen(false);
+        setDewasaMudaDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -1909,6 +1942,41 @@ export default function App() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  const handleSelectBab07Submenu = (item: Bab07SubmenuItem) => {
+    setActiveNav('dewasa-muda');
+    setDewasaMudaDropdownOpen(false);
+    setMobileMenuOpen(false);
+
+    if (item.targetType === 'age') {
+      setBab07AgeBand(item.targetValue as Bab07AgeBand['id']);
+      window.setTimeout(() => {
+        document
+          .getElementById('bab07-peta-usia')
+          ?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }, 40);
+    } else if (item.targetType === 'category') {
+      setBab07CategoryFilter(item.targetValue as Bab07Category);
+      window.setTimeout(() => {
+        document
+          .getElementById('bab07-materi')
+          ?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }, 40);
+    } else if (item.targetType === 'tool') {
+      setBab07Tool(item.targetValue as DewasaMudaToolId);
+      window.setTimeout(() => {
+        document
+          .getElementById('bab07-kalkulator')
+          ?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }, 40);
+    } else {
+      window.setTimeout(() => {
+        document
+          .getElementById('bab07-ai-cards')
+          ?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }, 40);
+    }
+  };
 
   useEffect(() => {
     if (mobileSearchOpen) {
@@ -2137,13 +2205,55 @@ export default function App() {
       {
         id: 'app-buku-panduan',
         category: 'Artikel & Gizi' as const,
-        title: 'Buku Panduan Keluarga Papua (Unduh PDF & E-Book)',
-        subtitle: 'Unduh buku panduan lengkap 6 bab berisi adat, parenting, gizi lokal, dan panduan AI.',
-        keywords: 'buku panduan ebook pdf download unduh manual keluarga parenting adat gizi papua',
+        title: 'Buku Panduan Keluarga Papua (7 Bab PDF & E-Book Offline)',
+        subtitle: 'Unduh buku panduan lengkap 7 bab termasuk Bab 07 Dewasa Muda 18+.',
+        keywords: 'buku panduan ebook pdf download unduh manual keluarga parenting adat gizi papua bab 07',
         onSelect: () => {
           document.getElementById('buku-panduan')?.scrollIntoView({behavior: 'smooth', block: 'start'});
         },
       },
+      {
+        id: 'bab07-utama',
+        category: 'Parenting' as const,
+        title: 'Bab 07 — Dewasa Muda Papua 18+: Kerja, Ekonomi & Keluarga',
+        subtitle: '20 unit materi, 4 peta usia, 12 kartu Sahabat AI, dan 8 kalkulator nyata.',
+        keywords: 'bab 07 dewasa muda 18+ mandiri ekonomi kerja cv umkm perkawinan rumah tangga 90 hari',
+        onSelect: () => {
+          document.getElementById('bab-07-dewasa-muda')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
+      ...BAB07_AGE_MAP.map((band) => ({
+        id: `bab07-age-${band.id}`,
+        category: 'Parenting' as const,
+        title: `Panduan Usia ${band.label}: ${band.shortTitle}`,
+        subtitle: band.tagline,
+        keywords: `${band.label} ${band.shortTitle} ${band.goal} dewasa muda 18+`,
+        onSelect: () => {
+          setBab07AgeBand(band.id);
+          document.getElementById('bab07-peta-usia')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...BAB07_AI_CARDS.map((card) => ({
+        id: `bab07-ai-${card.id}`,
+        category: 'Topik Konsultasi' as const,
+        title: `Tanya AI: ${card.title}`,
+        subtitle: card.description,
+        keywords: `${card.title} ${card.topic} ${card.description} dewasa muda ai`,
+        onSelect: () => {
+          document.getElementById('bab07-ai-cards')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
+      ...BAB07_LESSONS.map((lesson) => ({
+        id: `bab07-${lesson.id}`,
+        category: 'Parenting' as const,
+        title: `Bab 07 Unit ${lesson.number}: ${lesson.title}`,
+        subtitle: lesson.summary,
+        keywords: `${lesson.title} ${lesson.category} ${lesson.summary} bab 07 dewasa muda`,
+        onSelect: () => {
+          setBab07CategoryFilter(lesson.category);
+          document.getElementById('bab07-materi')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      })),
       {
         id: 'app-install',
         category: 'Topik Konsultasi' as const,
@@ -2319,6 +2429,58 @@ export default function App() {
               <Images className="h-3.5 w-3.5 mb-0.5" strokeWidth={2} aria-hidden="true" />
               <span>Galeri</span>
             </a>
+
+            {/* Dropdown Menu: PARENTING DEWASA MUDA 18+ */}
+            <div ref={dewasaMudaMenuRef} className="relative">
+              <button
+                type="button"
+                aria-expanded={dewasaMudaDropdownOpen}
+                aria-haspopup="menu"
+                onClick={() => setDewasaMudaDropdownOpen((prev) => !prev)}
+                className={`inline-flex flex-col items-center justify-center rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  activeNav === 'dewasa-muda' || dewasaMudaDropdownOpen
+                    ? 'bg-[#F2C22B] text-[#16241D]'
+                    : 'text-white/90 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                <span className="inline-flex items-center gap-0.5 mb-0.5">
+                  <Briefcase className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+                  <ChevronDown className="h-3 w-3" aria-hidden="true" />
+                </span>
+                <span>Dewasa Muda 18+</span>
+              </button>
+
+              {dewasaMudaDropdownOpen && (
+                <div
+                  role="menu"
+                  aria-label="PARENTING DEWASA MUDA 18+"
+                  className="absolute right-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-2xl border border-[#DFD8CA] bg-white text-[#16241D] shadow-xl"
+                >
+                  <div className="border-b border-[#EFEAE0] bg-[#163B22] px-4 py-2.5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#F2C22B]">
+                      PARENTING DEWASA MUDA 18+
+                    </p>
+                    <p className="text-xs font-semibold text-white">
+                      Bab 07 · Ekonomi, Kerja &amp; Keluarga
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 divide-y divide-[#F3EFE7] max-h-80 overflow-y-auto">
+                    {BAB07_SUBMENUS.map((sub) => (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        role="menuitem"
+                        onClick={() => handleSelectBab07Submenu(sub)}
+                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-xs font-semibold text-[#16241D] transition-colors hover:bg-[#FAF4E4] hover:text-[#1D4A27] cursor-pointer"
+                      >
+                        <span>{sub.label}</span>
+                        <ArrowRight className="h-3.5 w-3.5 text-[#C9A24D]" aria-hidden="true" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right Action: Global Search + Masuk / Profil + Mobile Triggers */}
@@ -2623,6 +2785,25 @@ export default function App() {
                 <Info className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
                 <span>Tentang Kami</span>
               </a>
+            </div>
+
+            {/* Mobile Submenu: PARENTING DEWASA MUDA 18+ */}
+            <div className="mt-2.5 rounded-xl border border-white/15 bg-[#12301B] p-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-[#F2C22B]">
+                PARENTING DEWASA MUDA 18+ (BAB 07)
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-1.5">
+                {BAB07_SUBMENUS.map((sub) => (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    onClick={() => handleSelectBab07Submenu(sub)}
+                    className="flex min-h-[36px] items-center rounded-lg border border-white/15 bg-white/5 px-2.5 py-1 text-left text-xs font-medium text-white hover:border-[#F2C22B] hover:bg-white/10 cursor-pointer"
+                  >
+                    {sub.label}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
               <HeaderInstallButton
@@ -3773,11 +3954,34 @@ export default function App() {
           </div>
         </section>
 
+        {/* Modul Baru BAB 07: Parenting Dewasa Muda Papua 18+ */}
+        <DewasaMudaModule
+          activeAgeBand={bab07AgeBand}
+          onChangeAgeBand={setBab07AgeBand}
+          activeCategoryFilter={bab07CategoryFilter}
+          onChangeCategoryFilter={setBab07CategoryFilter}
+          activeTool={bab07Tool}
+          onChangeTool={setBab07Tool}
+          onAskAI={(promptText, topic) => handleAskAI(promptText, topic)}
+          onReadBab07={() =>
+            setGuidebookReaderReq({chapterId: 'dewasa-muda-bab07', nonce: Date.now()})
+          }
+          onDownloadBab07={() => {
+            downloadChapterPdfById('dewasa-muda-bab07');
+          }}
+          onDownloadOfflineHtml={() => {
+            downloadAllChaptersOfflineHtml();
+          }}
+        />
+
         {/* Section Baru: Kalender Keluarga Papua */}
         <KalenderKeluargaPapua onAskAI={(promptText, topic) => handleAskAI(promptText, topic)} />
 
         {/* Section Baru: Buku Panduan Keluarga Papua (Unduh PDF / Offline HTML) */}
-        <GuidebookSection onAskAI={(promptText, topic) => handleAskAI(promptText, topic)} />
+        <GuidebookSection
+          onAskAI={(promptText, topic) => handleAskAI(promptText, topic)}
+          externalReaderRequest={guidebookReaderReq}
+        />
 
         {/* Section Baru: Cara Konsultasi */}
         <section

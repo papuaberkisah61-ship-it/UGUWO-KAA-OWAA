@@ -1,9 +1,10 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {jsPDF} from 'jspdf';
 import {
   BookHeart,
   BookOpen,
   BookOpenCheck,
+  Briefcase,
   Check,
   CheckCircle2,
   ChevronLeft,
@@ -218,7 +219,72 @@ export const GUIDEBOOK_CHAPTERS: GuideChapter[] = [
       },
     ],
   },
+  {
+    id: 'dewasa-muda-bab07',
+    number: 'Bab 07',
+    title: 'Dewasa Muda Papua: Mandiri Ekonomi, Kerja & Keluarga',
+    subtitle: '20 unit praktis usia 18+, peta usia, karier, UMKM lokal & rumah tangga bijak',
+    icon: Briefcase,
+    accentBg: 'bg-[#FAF4E4]',
+    accentText: 'text-[#8C5A2B]',
+    summary:
+      'Modul lengkap mendampingi generasi 18+ berdiri mandiri secara ekonomi, siap memasuki dunia kerja atau usaha pangan lokal Papua, matang secara emosional, dan bijak mempersiapkan keluarga sesuai adat dan iman.',
+    aiPrompt:
+      'Bantu sa merangkum langkah paling realistis dari Bab 07 Dewasa Muda Papua 18+ untuk menyiapkan kemandirian ekonomi, pekerjaan, dan kesiapan keluarga.',
+    sections: [
+      {
+        heading: 'Filosofi Kedewasaan, Peran Orang Tua (18+) & 8 Pilar',
+        paragraphs: [
+          'Kedewasaan Papua bukan sekadar angka usia, melainkan keberanian bertanggung jawab atas nafkah, tutur kata, pengelolaan uang, serta penghormatan kepada keluarga besar dan adat. Orang tua beralih peran dari pengatur menjadi sahabat diskusi yang bijak.',
+        ],
+        bullets: [
+          'Delapan Pilar Dewasa Muda: Kemandirian mental, literasi keuangan, disiplin kerja, keterampilan digital/vokasi, komunikasi sehat, kematangan emosi, tanggung jawab keluarga besar, serta penghormatan adat dan iman.',
+          'Peta Usia Tanpa Pemaksaan: Kelompok 18–21 (fondasi & vokasi), 22–25 (transisi kerja & dana darurat), 26–30 (kemapanan karier & musyawarah hidup), dan 30+ (kepemimpinan & mentor generasi). Rentang usia bukan kewajiban menikah atau memiliki anak.',
+        ],
+      },
+      {
+        heading: 'Dunia Kerja, CV Profesional, Hak Pekerja & Kewirausahaan Papua',
+        bullets: [
+          'Persiapan Karier & CV: Susun CV ringkas 1–2 halaman berisi keahlian nyata, pengalaman organisasi/magang, dan surat lamaran sopan tanpa melebih-lebihkan fakta.',
+          'Etika & Hak Pekerja: Pahami perjanjian kerja tertulis, hak upah layak, jam kerja aman, kepesertaan BPJS Ketenagakerjaan/Kesehatan, serta kedisiplinan waktu.',
+          'UMKM & Pangan Lokal Papua: Kelola potensi sagu, ikan asap/segar, kopi pegunungan, keladi, serta kerajinan noken dengan pembukuan modal terpisah dari uang dapur, tanpa menjanjikan keuntungan instan.',
+        ],
+      },
+      {
+        heading: 'Keuangan Keluarga, Mas Kawin Bijak (7 Wilayah Adat) & Program 90 Hari',
+        bullets: [
+          'Aturan Arus Kas 50-30-20 Adaptif: Prioritaskan kebutuhan pokok dan dana darurat 3–6 bulan pengeluaran sebelum mengambil cicilan konsumtif.',
+          'Mas Kawin & Persiapan Perkawinan: Utamakan musyawarah keluarga di masing-masing 7 wilayah adat tanpa menyamaratakan tradisi antar suku, menjaga martabat sekaligus mencegah jerat utang pasangan muda.',
+          'Kesehatan Reproduksi & Perencanaan 5 Tahun: Jaga kesehatan mental, komunikasi tanpa kekerasan, diskusi bersama tenaga medis terpercaya, dan evaluasi kemajuan melalui Program Kemandirian 90 Hari.',
+        ],
+        tip: 'Gunakan 8 kalkulator nyata di bagian Bab 07 (Arus Kas, Dana Darurat, Generator CV PDF, UMKM, Modal, Anggaran Perkawinan, Keuangan Keluarga, dan Checklist 90 Hari).',
+      },
+    ],
+  },
 ];
+
+export function downloadFullGuidebookPdf() {
+  buildPdfFromChapters(
+    GUIDEBOOK_CHAPTERS,
+    'Buku-Panduan-Keluarga-Papua-UGUWO-KAA-OWAA.pdf',
+    'Panduan Lengkap 7 Bab · Keluarga, Parenting 0–18+, Adat & Ketahanan Gizi Papua',
+  );
+}
+
+export function downloadChapterPdfById(chapterId: string): GuideChapter | undefined {
+  const chapter = GUIDEBOOK_CHAPTERS.find((c) => c.id === chapterId);
+  if (!chapter) return undefined;
+  buildPdfFromChapters(
+    [chapter],
+    `UGUWO-KAA-OWAA-${chapter.number.replace(/\s+/g, '-')}-${chapter.id}.pdf`,
+    `${chapter.number} · ${chapter.title}`,
+  );
+  return chapter;
+}
+
+export function downloadAllChaptersOfflineHtml() {
+  downloadGuidebookHtml(GUIDEBOOK_CHAPTERS);
+}
 
 function buildPdfFromChapters(chapters: GuideChapter[], fileName: string, docSubtitle: string) {
   const doc = new jsPDF({
@@ -297,28 +363,28 @@ function buildPdfFromChapters(chapters: GuideChapter[], fileName: string, docSub
   doc.text(docSubtitle, marginX, 97, {maxWidth});
 
   // Cover Overview & Table of Contents
-  cursorY = 126;
+  cursorY = 123;
   doc.setTextColor(22, 36, 29);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(13);
   doc.text('Daftar Isi Panduan', marginX, cursorY);
-  cursorY += 8;
+  cursorY += 7;
 
   chapters.forEach((ch) => {
     doc.setFillColor(250, 248, 244);
     doc.setDrawColor(226, 220, 207);
-    doc.roundedRect(marginX, cursorY, maxWidth, 17, 2.5, 2.5, 'FD');
+    doc.roundedRect(marginX, cursorY, maxWidth, 14.5, 2.5, 2.5, 'FD');
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(92, 61, 46);
-    doc.text(ch.number.toUpperCase(), marginX + 4, cursorY + 6);
+    doc.text(ch.number.toUpperCase(), marginX + 4, cursorY + 5);
 
-    doc.setFontSize(11);
+    doc.setFontSize(10.5);
     doc.setTextColor(29, 74, 39);
-    doc.text(ch.title, marginX + 4, cursorY + 12);
+    doc.text(ch.title, marginX + 4, cursorY + 10.5);
 
-    cursorY += 20;
+    cursorY += 17.5;
   });
 
   doc.setFont('helvetica', 'normal');
@@ -517,12 +583,22 @@ function downloadGuidebookHtml(chapters: GuideChapter[]) {
 
 interface GuidebookSectionProps {
   onAskAI: (promptText: string, topic?: string) => void;
+  externalReaderRequest?: {chapterId: string; nonce: number} | null;
 }
 
-export function GuidebookSection({onAskAI}: GuidebookSectionProps) {
+export function GuidebookSection({onAskAI, externalReaderRequest}: GuidebookSectionProps) {
   const [readerOpen, setReaderOpen] = useState(false);
   const [activeChapterIdx, setActiveChapterIdx] = useState(0);
   const [downloadedFeedback, setDownloadedFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!externalReaderRequest) return;
+    const idx = GUIDEBOOK_CHAPTERS.findIndex((c) => c.id === externalReaderRequest.chapterId);
+    if (idx >= 0) {
+      setActiveChapterIdx(idx);
+      setReaderOpen(true);
+    }
+  }, [externalReaderRequest]);
 
   const showFeedback = (message: string) => {
     setDownloadedFeedback(message);
@@ -532,12 +608,8 @@ export function GuidebookSection({onAskAI}: GuidebookSectionProps) {
   };
 
   const handleDownloadFullPdf = () => {
-    buildPdfFromChapters(
-      GUIDEBOOK_CHAPTERS,
-      'Buku-Panduan-Keluarga-Papua-UGUWO-KAA-OWAA.pdf',
-      'Panduan Lengkap 6 Bab · Keluarga, Parenting, Adat & Ketahanan Gizi Papua',
-    );
-    showFeedback('Buku Panduan Lengkap (.PDF) berhasil diunduh!');
+    downloadFullGuidebookPdf();
+    showFeedback('Buku Panduan Lengkap 7 Bab (.PDF) berhasil diunduh!');
   };
 
   const handleDownloadChapterPdf = (chapter: GuideChapter) => {
@@ -550,8 +622,8 @@ export function GuidebookSection({onAskAI}: GuidebookSectionProps) {
   };
 
   const handleDownloadOfflineHtml = () => {
-    downloadGuidebookHtml(GUIDEBOOK_CHAPTERS);
-    showFeedback('E-Book Offline (.HTML) berhasil diunduh!');
+    downloadAllChaptersOfflineHtml();
+    showFeedback('E-Book Offline 7 Bab (.HTML) berhasil diunduh!');
   };
 
   const activeChapter = GUIDEBOOK_CHAPTERS[activeChapterIdx] ?? GUIDEBOOK_CHAPTERS[0];
@@ -570,24 +642,24 @@ export function GuidebookSection({onAskAI}: GuidebookSectionProps) {
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F2C22B] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-[#16241D]">
                 <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>E-Book Resmi Gratis</span>
+                <span>E-Book Resmi Gratis · 7 Bab</span>
               </span>
 
               <h2 className="mt-4 font-display text-2xl sm:text-3xl font-extrabold leading-tight text-white">
                 Buku Panduan Keluarga Papua
               </h2>
               <p className="mt-1.5 font-display text-sm font-semibold text-[#F2C22B]">
-                Edisi Lengkap UGUWO KAA OWAA
+                Edisi Lengkap UGUWO KAA OWAA (Termasuk Bab 07 Dewasa Muda 18+)
               </p>
 
               <p className="mt-3 text-xs sm:text-sm leading-relaxed text-[#DCECE1]">
-                Pegangan praktis untuk pasangan muda, orang tua, dan keluarga besar Papua berisi nilai adat, musyawarah mas kawin bijak, 8 pilar parenting, ketahanan pangan lokal, hingga panduan fitur AI.
+                Pegangan praktis untuk dewasa muda 18+, pasangan muda, orang tua, dan keluarga besar Papua berisi nilai adat, mas kawin bijak, 8 pilar parenting, gizi lokal, kemandirian ekonomi, hingga panduan fitur AI.
               </p>
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-2 border-t border-white/15 pt-4 text-center">
               <div className="rounded-xl bg-white/10 px-2 py-2">
-                <p className="font-display text-lg font-extrabold text-[#F2C22B]">6</p>
+                <p className="font-display text-lg font-extrabold text-[#F2C22B]">7</p>
                 <p className="text-[10px] text-[#DCECE1]">Bab Lengkap</p>
               </div>
               <div className="rounded-xl bg-white/10 px-2 py-2">
@@ -615,8 +687,8 @@ export function GuidebookSection({onAskAI}: GuidebookSectionProps) {
                 {[
                   'Ringkasan 7 Wilayah Adat & Mas Kawin Bijak',
                   'Peta Tumbuh Kembang Anak 0–18+ Tahun',
-                  'Menu Gizi Keluarga Pangan Lokal Papua',
-                  'Panduan Suara, Gambar AI & Kalender Keluarga',
+                  'Bab 07 Baru: Dewasa Muda 18+, Karier & UMKM Papua',
+                  'Menu Gizi Lokal, Suara AI & Kalender Keluarga',
                 ].map((item) => (
                   <div
                     key={item}
@@ -679,14 +751,19 @@ export function GuidebookSection({onAskAI}: GuidebookSectionProps) {
         </div>
       </div>
 
-      {/* 6 Chapter Cards Grid */}
+      {/* 7 Chapter Cards Grid */}
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {GUIDEBOOK_CHAPTERS.map((chapter, idx) => {
           const Icon = chapter.icon;
+          const isFeaturedBab07 = chapter.id === 'dewasa-muda-bab07';
           return (
             <div
               key={chapter.id}
-              className="flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-white p-5 shadow-xs transition-colors hover:border-[#1D4A27]/40"
+              className={`flex flex-col justify-between rounded-2xl border p-5 shadow-xs transition-colors hover:border-[#1D4A27]/40 ${
+                isFeaturedBab07
+                  ? 'border-[#C9A24D] bg-linear-to-br from-white via-[#FAF8F4] to-[#FAF4E4] sm:col-span-2 lg:col-span-3'
+                  : 'border-[#E2DCCF] bg-white'
+              }`}
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
