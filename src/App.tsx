@@ -3,12 +3,19 @@ import {
   Apple,
   ArrowRight,
   Baby,
+  Bell,
+  BellOff,
+  BellRing,
   BookHeart,
   BookOpen,
   BookOpenCheck,
+  Briefcase,
+  CalendarDays,
+  CalendarPlus,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  Clock,
   Compass,
   Droplets,
   Feather,
@@ -28,6 +35,7 @@ import {
   MessageCircle,
   MessageSquareText,
   Newspaper,
+  Plus,
   Quote,
   Search,
   ShieldCheck,
@@ -35,6 +43,7 @@ import {
   Smile,
   Sparkles,
   Sprout,
+  Trash2,
   User,
   Users,
   Utensils,
@@ -60,6 +69,7 @@ import {
   MobileAppSection,
   OfflineIndicator,
 } from './components/PWAInstallBanner';
+import {GuidebookSection} from './components/GuidebookSection';
 
 type HubCategoryId =
   | 'perkawinan'
@@ -435,6 +445,87 @@ const PARENTING_AGE_FILTERS = [
   'Dewasa Muda (18+ Tahun)',
 ];
 
+const YOUNG_ADULT_PRACTICAL_TIPS = [
+  {
+    id: 'ya-tabungan',
+    badge: 'Kemandirian Ekonomi',
+    title: 'Pisahkan Tabungan & Dana Darurat Sejak Gaji Pertama',
+    summary:
+      'Latih anak dewasa muda menyisihkan minimal 10–20% penghasilan awal untuk dana darurat dan modal masa depan sebelum mengatur belanja bulanan.',
+    icon: Wallet,
+    accentBg: 'bg-[#E6EFE9]',
+    accentText: 'text-[#255C34]',
+    topic: 'Ekonomi Keluarga',
+    aiPrompt:
+      '[Fokus Dewasa Muda 18+] Bagaimana langkah praktis membiasakan anak muda Papua yang baru bekerja agar disiplin menabung, menyiapkan dana darurat, dan mengelola penghasilan pertamanya?',
+  },
+  {
+    id: 'ya-kerja',
+    badge: 'Dunia Kerja & Usaha',
+    title: 'Bangun Etos Kerja Disiplin & Keterampilan Produktif',
+    summary:
+      'Dampingi anak muda membangun CV/portofolio nyata, ketepatan waktu di tempat kerja, serta peluang usaha lokal berbasis pertanian, perikanan, atau jasa digital.',
+    icon: Briefcase,
+    accentBg: 'bg-[#E5EDF4]',
+    accentText: 'text-[#1E5670]',
+    topic: 'Keluarga Modern',
+    aiPrompt:
+      '[Fokus Dewasa Muda 18+] Apa bekal sikap kerja, keterampilan praktis, dan ide usaha mandiri yang bisa disiapkan anak muda Papua saat memasuki dunia kerja?',
+  },
+  {
+    id: 'ya-keluarga-besar',
+    badge: 'Ekonomi Keluarga',
+    title: 'Atur Dukungan Keluarga Besar Secara Bijak & Terukur',
+    summary:
+      'Ajarkan cara tetap berbakti dan membantu orang tua atau adik dengan anggaran tetap yang jelas, sehingga kemandirian ekonomi diri sendiri dan rumah tangga baru tetap terjaga.',
+    icon: Users,
+    accentBg: 'bg-[#F5E9D3]',
+    accentText: 'text-[#8C5A2B]',
+    topic: 'Ekonomi Keluarga',
+    aiPrompt:
+      '[Fokus Dewasa Muda 18+] Bagaimana mengatur keuangan agar dewasa muda Papua tetap bisa membantu orang tua dan keluarga besar dengan hormat tanpa menghabiskan tabungan masa depan sendiri?',
+  },
+  {
+    id: 'ya-maskawin',
+    badge: 'Persiapan Perkawinan',
+    title: 'Rencanakan Perkawinan Adat & Mas Kawin Tanpa Beban Utang',
+    summary:
+      'Bekali calon pengantin kemampuan berdialog santun bersama kedua orang tua dan tetua adat agar mas kawin dan pesta pernikahan sesuai kemampuan ekonomi bersama.',
+    icon: Feather,
+    accentBg: 'bg-[#F3E7E4]',
+    accentText: 'text-[#8C3B2B]',
+    topic: 'Perkawinan Adat',
+    aiPrompt:
+      '[Fokus Dewasa Muda 18+] Bagaimana orang tua membimbing anak dewasa muda berdialog soal rencana perkawinan adat dan mas kawin agar tidak memulai rumah tangga dengan beban utang?',
+  },
+  {
+    id: 'ya-keuangan-nikah',
+    badge: 'Persiapan Perkawinan',
+    title: 'Keterbukaan Keuangan & Peran Suami-Istri Sebelum Menikah',
+    summary:
+      'Dorong pasangan muda membicarakan keterbukaan penghasilan, pembagian pos belanja rumah tangga, tempat tinggal, serta rencana pendidikan anak sebelum pemberkatan.',
+    icon: HeartHandshake,
+    accentBg: 'bg-[#E3EFE6]',
+    accentText: 'text-[#1D4A27]',
+    topic: 'Perkawinan Adat',
+    aiPrompt:
+      '[Fokus Dewasa Muda 18+] Hal-hal keuangan dan pembagian peran rumah tangga apa saja yang wajib disepakati calon pasangan muda Papua sebelum menikah?',
+  },
+  {
+    id: 'ya-emosi-iman',
+    badge: 'Kesiapan Hidup Mandiri',
+    title: 'Kematangan Emosi, Iman & Anti-Kekerasan Menghadapi Tekanan',
+    summary:
+      'Tanamkan ketangguhan mental saat menghadapi tekanan kerja atau perbedaan pendapat, selalu mencari solusi lewat doa, musyawarah, dan komunikasi saling menghormati.',
+    icon: ShieldCheck,
+    accentBg: 'bg-[#EAE6F3]',
+    accentText: 'text-[#4B3A70]',
+    topic: 'Keluarga Harmonis',
+    aiPrompt:
+      '[Fokus Dewasa Muda 18+] Bagaimana membangun kematangan emosi, iman, dan ketahanan mental anak dewasa muda agar siap menghadapi tekanan dunia kerja dan kehidupan berumah tangga?',
+  },
+];
+
 const FAMILY_STORIES = [
   {
     name: 'Yosep Kogoya & Ester Wanimbo',
@@ -690,6 +781,1051 @@ const ANCESTRAL_TALES = [
   },
 ];
 
+type FamilyEventCategory = 'adat' | 'komunitas' | 'sekolah' | 'keluarga';
+
+interface FamilyCalendarEvent {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  time?: string;
+  category: FamilyEventCategory;
+  location?: string;
+  notes?: string;
+  completed?: boolean;
+}
+
+const CALENDAR_STORAGE_KEY = 'uguwoo_family_calendar_v1';
+const NOTIF_SETTINGS_STORAGE_KEY = 'uguwoo_calendar_notif_settings_v1';
+const NOTIFIED_EVENTS_STORAGE_KEY = 'uguwoo_calendar_notified_v1';
+
+interface CalendarNotificationSettings {
+  enabled: boolean;
+  leadDays: number;
+}
+
+function loadNotificationSettings(): CalendarNotificationSettings {
+  try {
+    const raw = localStorage.getItem(NOTIF_SETTINGS_STORAGE_KEY);
+    if (!raw) return {enabled: false, leadDays: 7};
+    const parsed = JSON.parse(raw) as Partial<CalendarNotificationSettings>;
+    return {
+      enabled: Boolean(parsed.enabled),
+      leadDays:
+        typeof parsed.leadDays === 'number' && [0, 1, 3, 7].includes(parsed.leadDays)
+          ? parsed.leadDays
+          : 7,
+    };
+  } catch {
+    return {enabled: false, leadDays: 7};
+  }
+}
+
+function loadNotifiedMap(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(NOTIFIED_EVENTS_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, number>;
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function daysUntilEvent(isoDate: string): number {
+  const parts = isoDate.split('-').map(Number);
+  if (parts.length !== 3 || parts.some(Number.isNaN)) return 9999;
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const targetStart = new Date(parts[0], parts[1] - 1, parts[2]).getTime();
+  return Math.round((targetStart - todayStart) / (1000 * 60 * 60 * 24));
+}
+
+function formatRelativeDayLabel(diffDays: number): string {
+  if (diffDays === 0) return 'Hari Ini';
+  if (diffDays === 1) return 'Besok';
+  if (diffDays > 1) return `${diffDays} hari lagi`;
+  return `${Math.abs(diffDays)} hari lalu`;
+}
+
+const EVENT_CATEGORIES: {
+  id: FamilyEventCategory;
+  label: string;
+  badgeClass: string;
+  dotClass: string;
+}[] = [
+  {
+    id: 'adat',
+    label: 'Upacara Adat',
+    badgeClass: 'bg-[#F5E9D3] text-[#8C5A2B] border-[#E8D2AA]',
+    dotClass: 'bg-[#C9A24D]',
+  },
+  {
+    id: 'komunitas',
+    label: 'Pertemuan Komunitas',
+    badgeClass: 'bg-[#E3EFE6] text-[#1D4A27] border-[#C5DEC9]',
+    dotClass: 'bg-[#1D4A27]',
+  },
+  {
+    id: 'sekolah',
+    label: 'Sekolah & Prestasi Anak',
+    badgeClass: 'bg-[#E5EDF4] text-[#1E5670] border-[#C7DAEA]',
+    dotClass: 'bg-[#1E5670]',
+  },
+  {
+    id: 'keluarga',
+    label: 'Momen Keluarga',
+    badgeClass: 'bg-[#F3E7E4] text-[#8C3B2B] border-[#E4C9C2]',
+    dotClass: 'bg-[#8C3B2B]',
+  },
+];
+
+const INDONESIAN_MONTHS = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+
+const SHORT_WEEKDAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+function toIsoDateString(dateObj: Date): string {
+  const y = dateObj.getFullYear();
+  const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const d = String(dateObj.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function createDefaultCalendarEvents(): FamilyCalendarEvent[] {
+  const now = new Date();
+  const plusDays = (days: number) => {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
+    return toIsoDateString(d);
+  };
+
+  return [
+    {
+      id: 'evt-seed-1',
+      title: 'Musyawarah Keluarga & Persiapan Adat',
+      date: plusDays(3),
+      time: '16:00',
+      category: 'adat',
+      location: 'Rumah Orang Tua / Para-Para Adat',
+      notes: 'Pertemuan dua keluarga besar untuk menyepakati jadwal prosesi adat dengan penuh sukacita.',
+      completed: false,
+    },
+    {
+      id: 'evt-seed-2',
+      title: 'Ibadah Syukuran & Pertemuan Komunitas Kampung',
+      date: plusDays(6),
+      time: '10:00',
+      category: 'komunitas',
+      location: 'Balai Warga / Lingkungan',
+      notes: 'Doa bersama, berbagi makanan lokal papeda & ikan kuah kuning, serta gotong royong.',
+      completed: false,
+    },
+    {
+      id: 'evt-seed-3',
+      title: 'Pertemuan Orang Tua & Penerimaan Rapor Anak',
+      date: plusDays(10),
+      time: '08:30',
+      category: 'sekolah',
+      location: 'Sekolah Dasar Negeri',
+      notes: 'Mendampingi perkembangan belajar anak dan menyusun jadwal membaca bersama di rumah.',
+      completed: false,
+    },
+  ];
+}
+
+function loadCalendarEvents(): FamilyCalendarEvent[] {
+  try {
+    const raw = localStorage.getItem(CALENDAR_STORAGE_KEY);
+    if (!raw) return createDefaultCalendarEvents();
+    const parsed = JSON.parse(raw) as FamilyCalendarEvent[];
+    if (!Array.isArray(parsed)) return createDefaultCalendarEvents();
+    return parsed;
+  } catch {
+    return createDefaultCalendarEvents();
+  }
+}
+
+function formatDateIndonesian(isoDate: string): string {
+  const parts = isoDate.split('-').map(Number);
+  if (parts.length !== 3 || parts.some(Number.isNaN)) return isoDate;
+  const [year, month, day] = parts;
+  return `${day} ${INDONESIAN_MONTHS[month - 1] ?? ''} ${year}`;
+}
+
+export function KalenderKeluargaPapua({
+  onAskAI,
+}: {
+  onAskAI: (promptText: string, topic?: string) => void;
+}) {
+  const [events, setEvents] = useState<FamilyCalendarEvent[]>(() => loadCalendarEvents());
+  const [viewMonth, setViewMonth] = useState<Date>(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+  const [selectedDateFilter, setSelectedDateFilter] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<FamilyEventCategory | 'semua'>('semua');
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  const [draftTitle, setDraftTitle] = useState('');
+  const [draftDate, setDraftDate] = useState(() => toIsoDateString(new Date()));
+  const [draftTime, setDraftTime] = useState('09:00');
+  const [draftCategory, setDraftCategory] = useState<FamilyEventCategory>('adat');
+  const [draftLocation, setDraftLocation] = useState('');
+  const [draftNotes, setDraftNotes] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const [notifSettings, setNotifSettings] = useState<CalendarNotificationSettings>(() =>
+    loadNotificationSettings(),
+  );
+  const [notifPermission, setNotifPermission] = useState<
+    NotificationPermission | 'unsupported'
+  >(() => {
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      return 'unsupported';
+    }
+    return Notification.permission;
+  });
+  const [notifStatusBanner, setNotifStatusBanner] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CALENDAR_STORAGE_KEY, JSON.stringify(events));
+    } catch {
+      // Ignore storage error
+    }
+  }, [events]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(NOTIF_SETTINGS_STORAGE_KEY, JSON.stringify(notifSettings));
+    } catch {
+      // Ignore storage error
+    }
+  }, [notifSettings]);
+
+  const upcomingEvents = useMemo(() => {
+    return [...events]
+      .filter((ev) => {
+        if (ev.completed) return false;
+        const diff = daysUntilEvent(ev.date);
+        return diff >= 0 && diff <= notifSettings.leadDays;
+      })
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [events, notifSettings.leadDays]);
+
+  const sendBrowserReminder = (ev: FamilyCalendarEvent, isManual = false): boolean => {
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      if (isManual) {
+        setNotifStatusBanner(
+          'Browser ko belum mendukung notifikasi desktop/HP, namun pengingat tetap tampil di daftar agenda.',
+        );
+      }
+      return false;
+    }
+
+    if (Notification.permission !== 'granted') {
+      if (isManual) {
+        setNotifStatusBanner(
+          'Aktifkan izin notifikasi browser terlebih dahulu agar pengingat dapat muncul.',
+        );
+      }
+      return false;
+    }
+
+    const catLabel =
+      EVENT_CATEGORIES.find((c) => c.id === ev.category)?.label ?? 'Agenda Keluarga';
+    const diff = daysUntilEvent(ev.date);
+    const whenText =
+      diff >= 0 && diff <= 7
+        ? `${formatRelativeDayLabel(diff)} (${formatDateIndonesian(ev.date)})`
+        : formatDateIndonesian(ev.date);
+
+    const bodyParts = [
+      `${catLabel} · ${whenText}${ev.time ? ` pukul ${ev.time} WIT` : ''}`,
+      ev.location ? `Lokasi: ${ev.location}` : null,
+      ev.notes || null,
+    ].filter(Boolean);
+
+    try {
+      const notif = new Notification(`Pengingat: ${ev.title}`, {
+        body: bodyParts.join('\n'),
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: `uguwo-cal-${ev.id}`,
+      });
+      notif.onclick = () => {
+        window.focus();
+        document
+          .getElementById('kalender-keluarga')
+          ?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        notif.close();
+      };
+      return true;
+    } catch {
+      if (isManual) {
+        setNotifStatusBanner(
+          `Pengingat "${ev.title}" dijadwalkan untuk ${whenText}.`,
+        );
+      }
+      return false;
+    }
+  };
+
+  // Automatic local reminder check on mount, settings/event updates, and every 60 seconds
+  useEffect(() => {
+    if (!notifSettings.enabled || notifPermission !== 'granted') return;
+
+    const checkAndNotifyUpcoming = () => {
+      const notifiedMap = loadNotifiedMap();
+      let updated = false;
+
+      for (const ev of events) {
+        if (ev.completed) continue;
+        const diff = daysUntilEvent(ev.date);
+        if (diff < 0 || diff > notifSettings.leadDays) continue;
+
+        const key = `${ev.id}_${ev.date}_${notifSettings.leadDays}`;
+        if (!notifiedMap[key]) {
+          const sent = sendBrowserReminder(ev, false);
+          if (sent) {
+            notifiedMap[key] = Date.now();
+            updated = true;
+          }
+        }
+      }
+
+      if (updated) {
+        try {
+          localStorage.setItem(NOTIFIED_EVENTS_STORAGE_KEY, JSON.stringify(notifiedMap));
+        } catch {
+          // Ignore storage error
+        }
+      }
+    };
+
+    checkAndNotifyUpcoming();
+    const intervalId = window.setInterval(checkAndNotifyUpcoming, 60_000);
+    return () => window.clearInterval(intervalId);
+  }, [events, notifSettings.enabled, notifSettings.leadDays, notifPermission]);
+
+  const handleToggleBrowserReminders = async () => {
+    setNotifStatusBanner(null);
+
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      setNotifPermission('unsupported');
+      setNotifStatusBanner(
+        'Browser ini belum mendukung Notification API. Gunakan Chrome, Edge, atau Safari terbaru.',
+      );
+      return;
+    }
+
+    if (notifSettings.enabled && notifPermission === 'granted') {
+      setNotifSettings((prev) => ({...prev, enabled: false}));
+      setNotifStatusBanner('Pengingat notifikasi browser dijeda.');
+      return;
+    }
+
+    let currentPermission = Notification.permission;
+    if (currentPermission === 'default') {
+      currentPermission = await Notification.requestPermission();
+    }
+    setNotifPermission(currentPermission);
+
+    if (currentPermission === 'granted') {
+      setNotifSettings((prev) => ({...prev, enabled: true}));
+      const nextUpcoming = upcomingEvents[0];
+      if (nextUpcoming) {
+        sendBrowserReminder(nextUpcoming, true);
+        setNotifStatusBanner(
+          `Pengingat aktif! Notifikasi untuk "${nextUpcoming.title}" sudah dikirim sebagai contoh.`,
+        );
+      } else {
+        setNotifStatusBanner(
+          'Pengingat browser aktif! Kami akan mengingatkan ko sebelum upacara adat atau agenda sekolah tiba.',
+        );
+      }
+    } else {
+      setNotifSettings((prev) => ({...prev, enabled: false}));
+      setNotifStatusBanner(
+        'Izin notifikasi ditolak di browser. Aktifkan izin notifikasi pada ikon gembok/pengaturan situs untuk menerima pengingat otomatis.',
+      );
+    }
+  };
+
+  const todayIso = toIsoDateString(new Date());
+  const year = viewMonth.getFullYear();
+  const monthIdx = viewMonth.getMonth();
+  const firstDayOfWeek = new Date(year, monthIdx, 1).getDay();
+  const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+
+  const eventsByDate = useMemo(() => {
+    const map = new Map<string, FamilyCalendarEvent[]>();
+    for (const ev of events) {
+      const existing = map.get(ev.date) ?? [];
+      existing.push(ev);
+      map.set(ev.date, existing);
+    }
+    return map;
+  }, [events]);
+
+  const filteredEvents = useMemo(() => {
+    return [...events]
+      .filter((ev) => {
+        if (selectedDateFilter && ev.date !== selectedDateFilter) return false;
+        if (categoryFilter !== 'semua' && ev.category !== categoryFilter) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const dateCompare = a.date.localeCompare(b.date);
+        if (dateCompare !== 0) return dateCompare;
+        return (a.time || '').localeCompare(b.time || '');
+      });
+  }, [events, selectedDateFilter, categoryFilter]);
+
+  const handlePrevMonth = () => {
+    setViewMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setViewMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+  };
+
+  const handleSelectCalendarDay = (iso: string) => {
+    setDraftDate(iso);
+    setSelectedDateFilter((prev) => (prev === iso ? null : iso));
+  };
+
+  const handleAddEvent = (e: FormEvent) => {
+    e.preventDefault();
+    const cleanTitle = draftTitle.trim();
+    if (!cleanTitle) {
+      setFormError('Tuliskan nama acara atau kegiatan keluarga terlebih dahulu.');
+      return;
+    }
+    if (!draftDate) {
+      setFormError('Pilih tanggal acara terlebih dahulu.');
+      return;
+    }
+
+    const newEvent: FamilyCalendarEvent = {
+      id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      title: cleanTitle,
+      date: draftDate,
+      time: draftTime.trim() || undefined,
+      category: draftCategory,
+      location: draftLocation.trim() || undefined,
+      notes: draftNotes.trim() || undefined,
+      completed: false,
+    };
+
+    setEvents((prev) => [...prev, newEvent]);
+    setDraftTitle('');
+    setDraftLocation('');
+    setDraftNotes('');
+    setFormError(null);
+    setShowAddForm(false);
+    setSelectedDateFilter(null);
+  };
+
+  const handleToggleCompleted = (id: string) => {
+    setEvents((prev) =>
+      prev.map((ev) => (ev.id === id ? {...ev, completed: !ev.completed} : ev)),
+    );
+  };
+
+  const handleDeleteEvent = (id: string) => {
+    setEvents((prev) => prev.filter((ev) => ev.id !== id));
+  };
+
+  const renderCategoryIcon = (category: FamilyEventCategory) => {
+    switch (category) {
+      case 'adat':
+        return <Feather className="h-3.5 w-3.5" aria-hidden="true" />;
+      case 'komunitas':
+        return <Users className="h-3.5 w-3.5" aria-hidden="true" />;
+      case 'sekolah':
+        return <GraduationCap className="h-3.5 w-3.5" aria-hidden="true" />;
+      case 'keluarga':
+        return <Home className="h-3.5 w-3.5" aria-hidden="true" />;
+    }
+  };
+
+  return (
+    <section
+      id="kalender-keluarga"
+      className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-12"
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3D2E]">
+            Agenda Bersama Rumah Tangga
+          </p>
+          <h2 className="mt-0.5 font-display text-xl sm:text-2xl font-bold text-[#16241D]">
+            Kalender Keluarga Papua
+          </h2>
+          <p className="mt-1 max-w-2xl text-xs sm:text-sm text-[#425249]">
+            Catat dan kelola jadwal upacara adat, pertemuan komunitas, dan pencapaian sekolah anak agar keluarga tetap sehati dan teratur.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 self-start">
+          <button
+            type="button"
+            onClick={() => void handleToggleBrowserReminders()}
+            aria-pressed={notifSettings.enabled && notifPermission === 'granted'}
+            className={`inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              notifSettings.enabled && notifPermission === 'granted'
+                ? 'border-[#1D4A27] bg-[#E3EFE6] text-[#1D4A27]'
+                : 'border-[#DFD8CA] bg-white text-[#425249] hover:border-[#1D4A27] hover:text-[#1D4A27]'
+            }`}
+          >
+            {notifSettings.enabled && notifPermission === 'granted' ? (
+              <BellRing className="h-4 w-4 text-[#1D4A27]" aria-hidden="true" />
+            ) : notifPermission === 'denied' ? (
+              <BellOff className="h-4 w-4 text-[#8C3B2B]" aria-hidden="true" />
+            ) : (
+              <Bell className="h-4 w-4 text-[#C9A24D]" aria-hidden="true" />
+            )}
+            <span>
+              {notifSettings.enabled && notifPermission === 'granted'
+                ? 'Pengingat Aktif'
+                : 'Aktifkan Pengingat'}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowAddForm((prev) => !prev)}
+            className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <CalendarPlus className="h-4 w-4 text-[#F2C22B]" aria-hidden="true" />
+            <span>{showAddForm ? 'Tutup Form Acara' : 'Tambah Acara Keluarga'}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Upcoming Reminder & Browser Notification Bar */}
+      <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-[#E6DFD1] bg-[#FAF4E4] px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-2.5 min-w-0">
+          <BellRing className="mt-0.5 h-4 w-4 shrink-0 text-[#8C5A2B]" aria-hidden="true" />
+          <div className="min-w-0 text-xs leading-relaxed text-[#425249]">
+            <p className="font-semibold text-[#16241D]">
+              {upcomingEvents.length > 0
+                ? `${upcomingEvents.length} agenda terdekat dalam ${
+                    notifSettings.leadDays === 0 ? 'hari ini' : `${notifSettings.leadDays} hari ke depan`
+                  }: ${upcomingEvents
+                    .slice(0, 2)
+                    .map((ev) => `${ev.title} (${formatRelativeDayLabel(daysUntilEvent(ev.date))})`)
+                    .join(' · ')}`
+                : `Belum ada acara mendesak dalam ${
+                    notifSettings.leadDays === 0 ? 'hari ini' : `${notifSettings.leadDays} hari ke depan`
+                  }.`}
+            </p>
+            {notifStatusBanner && (
+              <p className="mt-1 text-[11px] font-medium text-[#1D4A27]">{notifStatusBanner}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <label htmlFor="cal-lead-days" className="text-[11px] font-semibold text-[#5C3D2E]">
+            Ingatkan:
+          </label>
+          <select
+            id="cal-lead-days"
+            value={notifSettings.leadDays}
+            onChange={(e) =>
+              setNotifSettings((prev) => ({...prev, leadDays: Number(e.target.value)}))
+            }
+            className="rounded-lg border border-[#DFD8CA] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-[#16241D] focus:border-[#1D4A27] focus:outline-none cursor-pointer"
+          >
+            <option value={0}>Hari H saja</option>
+            <option value={1}>1 hari sebelumnya</option>
+            <option value={3}>3 hari sebelumnya</option>
+            <option value={7}>7 hari ke depan</option>
+          </select>
+
+          {upcomingEvents.length > 0 && (
+            <button
+              type="button"
+              onClick={async () => {
+                if (notifPermission !== 'granted') {
+                  await handleToggleBrowserReminders();
+                } else {
+                  const ok = sendBrowserReminder(upcomingEvents[0], true);
+                  if (ok) {
+                    setNotifStatusBanner(
+                      `Pengingat untuk "${upcomingEvents[0].title}" berhasil dikirim ke browser.`,
+                    );
+                  }
+                }
+              }}
+              className="inline-flex min-h-[32px] items-center gap-1 rounded-lg border border-[#1D4A27] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#1D4A27] transition-colors hover:bg-[#1D4A27] hover:text-white cursor-pointer"
+            >
+              <Bell className="h-3 w-3" aria-hidden="true" />
+              <span>Kirim Pengingat</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Add Event Form */}
+      {showAddForm && (
+        <form
+          onSubmit={handleAddEvent}
+          className="mt-4 rounded-2xl border border-[#DFD8CA] bg-white p-5 sm:p-6 shadow-xs"
+        >
+          <div className="flex items-center justify-between gap-2 border-b border-[#EFEAE0] pb-3">
+            <h3 className="font-display text-base font-bold text-[#16241D]">
+              Catat Agenda Keluarga Baru
+            </h3>
+            <button
+              type="button"
+              onClick={() => {
+                setShowAddForm(false);
+                setFormError(null);
+              }}
+              aria-label="Tutup form"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#5E6D64] hover:bg-[#F3F1EC] cursor-pointer"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="sm:col-span-2">
+              <label
+                htmlFor="cal-event-title"
+                className="block text-xs font-semibold text-[#16241D]"
+              >
+                Nama Acara / Kegiatan *
+              </label>
+              <input
+                id="cal-event-title"
+                type="text"
+                value={draftTitle}
+                onChange={(e) => setDraftTitle(e.target.value)}
+                placeholder="Contoh: Musyawarah Mas Kawin / Penerimaan Rapor Anak"
+                maxLength={100}
+                className="mt-1.5 min-h-[42px] w-full rounded-xl border border-[#DFD8CA] bg-[#FAF8F4] px-3.5 text-sm text-[#16241D] focus:border-[#1D4A27] focus:bg-white focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="cal-event-date"
+                className="block text-xs font-semibold text-[#16241D]"
+              >
+                Tanggal *
+              </label>
+              <input
+                id="cal-event-date"
+                type="date"
+                value={draftDate}
+                onChange={(e) => setDraftDate(e.target.value)}
+                className="mt-1.5 min-h-[42px] w-full rounded-xl border border-[#DFD8CA] bg-[#FAF8F4] px-3.5 text-sm text-[#16241D] focus:border-[#1D4A27] focus:bg-white focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="cal-event-time"
+                className="block text-xs font-semibold text-[#16241D]"
+              >
+                Waktu (Opsional)
+              </label>
+              <input
+                id="cal-event-time"
+                type="time"
+                value={draftTime}
+                onChange={(e) => setDraftTime(e.target.value)}
+                className="mt-1.5 min-h-[42px] w-full rounded-xl border border-[#DFD8CA] bg-[#FAF8F4] px-3.5 text-sm text-[#16241D] focus:border-[#1D4A27] focus:bg-white focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <span className="block text-xs font-semibold text-[#16241D]">
+              Kategori Kegiatan
+            </span>
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {EVENT_CATEGORIES.map((cat) => {
+                const isSelected = draftCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setDraftCategory(cat.id)}
+                    className={`flex min-h-[40px] items-center gap-2 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors cursor-pointer ${
+                      isSelected
+                        ? 'border-[#1D4A27] bg-[#1D4A27] text-white'
+                        : 'border-[#DFD8CA] bg-[#FAF8F4] text-[#425249] hover:border-[#1D4A27]/50'
+                    }`}
+                  >
+                    {renderCategoryIcon(cat.id)}
+                    <span className="truncate">{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label
+                htmlFor="cal-event-location"
+                className="block text-xs font-semibold text-[#16241D]"
+              >
+                Lokasi / Tempat (Opsional)
+              </label>
+              <input
+                id="cal-event-location"
+                type="text"
+                value={draftLocation}
+                onChange={(e) => setDraftLocation(e.target.value)}
+                placeholder="Contoh: Para-para Adat / Sekolah / Rumah Keluarga"
+                maxLength={100}
+                className="mt-1.5 min-h-[42px] w-full rounded-xl border border-[#DFD8CA] bg-[#FAF8F4] px-3.5 text-sm text-[#16241D] focus:border-[#1D4A27] focus:bg-white focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="cal-event-notes"
+                className="block text-xs font-semibold text-[#16241D]"
+              >
+                Catatan Persiapan (Opsional)
+              </label>
+              <input
+                id="cal-event-notes"
+                type="text"
+                value={draftNotes}
+                onChange={(e) => setDraftNotes(e.target.value)}
+                placeholder="Contoh: Bawa piring adat, makanan lokal, atau buku rapor"
+                maxLength={180}
+                className="mt-1.5 min-h-[42px] w-full rounded-xl border border-[#DFD8CA] bg-[#FAF8F4] px-3.5 text-sm text-[#16241D] focus:border-[#1D4A27] focus:bg-white focus:outline-none"
+              />
+            </div>
+          </div>
+
+          {formError && (
+            <p className="mt-3 text-xs font-medium text-[#8C3B2B]" role="alert">
+              {formError}
+            </p>
+          )}
+
+          <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setShowAddForm(false)}
+              className="min-h-[40px] rounded-xl border border-[#DFD8CA] px-4 py-2 text-xs font-semibold text-[#425249] hover:bg-[#FAF8F4] cursor-pointer"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white hover:bg-[#265D33] cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>Simpan ke Kalender</span>
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Main 2-Column Calendar + Agenda List */}
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-12">
+        {/* Left: Interactive Monthly Grid */}
+        <div className="rounded-2xl border border-[#E2DCCF] bg-white p-5 shadow-xs lg:col-span-5">
+          <div className="flex items-center justify-between gap-2 border-b border-[#EFEAE0] pb-3.5">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E3EFE6] text-[#1D4A27]">
+                <CalendarDays className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <h3 className="font-display text-base font-bold text-[#16241D]">
+                {INDONESIAN_MONTHS[monthIdx]} {year}
+              </h3>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={handlePrevMonth}
+                aria-label="Bulan sebelumnya"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#E5DFD2] bg-[#FAF8F4] text-[#1D4A27] hover:border-[#1D4A27] cursor-pointer"
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNextMonth}
+                aria-label="Bulan berikutnya"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#E5DFD2] bg-[#FAF8F4] text-[#1D4A27] hover:border-[#1D4A27] cursor-pointer"
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-3 grid grid-cols-7 gap-1 text-center">
+            {SHORT_WEEKDAYS.map((dayName) => (
+              <div
+                key={dayName}
+                className="py-1 text-[11px] font-semibold uppercase tracking-wide text-[#5E6D64]"
+              >
+                {dayName}
+              </div>
+            ))}
+
+            {Array.from({length: firstDayOfWeek}).map((_, emptyIdx) => (
+              <div key={`empty-${emptyIdx}`} className="h-10" aria-hidden="true" />
+            ))}
+
+            {Array.from({length: daysInMonth}).map((_, idx) => {
+              const dayNum = idx + 1;
+              const iso = `${year}-${String(monthIdx + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+              const dayEvents = eventsByDate.get(iso) ?? [];
+              const isToday = iso === todayIso;
+              const isSelected = selectedDateFilter === iso;
+
+              return (
+                <button
+                  key={iso}
+                  type="button"
+                  onClick={() => handleSelectCalendarDay(iso)}
+                  aria-label={`Tanggal ${dayNum} ${INDONESIAN_MONTHS[monthIdx]}${
+                    dayEvents.length > 0 ? `, ada ${dayEvents.length} acara` : ''
+                  }`}
+                  className={`relative flex h-10 flex-col items-center justify-center rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#1D4A27] text-white'
+                      : isToday
+                        ? 'border border-[#C9A24D] bg-[#FAF4E4] text-[#16241D]'
+                        : 'text-[#16241D] hover:bg-[#F3F1EC]'
+                  }`}
+                >
+                  <span className="tabular-nums">{dayNum}</span>
+                  {dayEvents.length > 0 && (
+                    <span className="mt-0.5 flex items-center gap-0.5">
+                      {dayEvents.slice(0, 3).map((ev) => {
+                        const catMeta = EVENT_CATEGORIES.find((c) => c.id === ev.category);
+                        return (
+                          <span
+                            key={ev.id}
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              isSelected ? 'bg-[#F2C22B]' : catMeta?.dotClass ?? 'bg-[#1D4A27]'
+                            }`}
+                          />
+                        );
+                      })}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#EFEAE0] pt-3 text-[11px] text-[#5E6D64]">
+            <span>Ketuk tanggal untuk menyaring atau menambah acara.</span>
+            {selectedDateFilter && (
+              <button
+                type="button"
+                onClick={() => setSelectedDateFilter(null)}
+                className="font-semibold text-[#1D4A27] hover:underline cursor-pointer"
+              >
+                Tampilkan Semua Tanggal
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Right: Category Filters + Agenda Feed */}
+        <div className="rounded-2xl border border-[#E2DCCF] bg-white p-5 shadow-xs lg:col-span-7 flex flex-col">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EFEAE0] pb-3.5">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setCategoryFilter('semua')}
+                className={`min-h-[34px] rounded-full px-3 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                  categoryFilter === 'semua'
+                    ? 'bg-[#1D4A27] text-white'
+                    : 'bg-[#F3F1EC] text-[#425249] hover:bg-[#E7E3D9]'
+                }`}
+              >
+                Semua ({events.length})
+              </button>
+              {EVENT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setCategoryFilter(cat.id)}
+                  className={`inline-flex min-h-[34px] items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                    categoryFilter === cat.id
+                      ? 'bg-[#1D4A27] text-white'
+                      : 'bg-[#F3F1EC] text-[#425249] hover:bg-[#E7E3D9]'
+                  }`}
+                >
+                  {renderCategoryIcon(cat.id)}
+                  <span>{cat.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4 flex-1 space-y-3 max-h-[410px] overflow-y-auto pr-0.5">
+            {filteredEvents.length === 0 ? (
+              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[#DFD8CA] bg-[#FAF8F4] px-4 py-8 text-center">
+                <CalendarDays className="h-8 w-8 text-[#C9A24D]" aria-hidden="true" />
+                <p className="mt-2 font-display text-sm font-bold text-[#16241D]">
+                  Belum ada agenda untuk filter ini
+                </p>
+                <p className="mt-1 text-xs text-[#5E6D64]">
+                  Klik &ldquo;Tambah Acara Keluarga&rdquo; untuk mencatat acara adat, pertemuan komunitas, atau jadwal sekolah anak.
+                </p>
+              </div>
+            ) : (
+              filteredEvents.map((ev) => {
+                const catMeta =
+                  EVENT_CATEGORIES.find((c) => c.id === ev.category) ?? EVENT_CATEGORIES[0];
+
+                return (
+                  <div
+                    key={ev.id}
+                    className={`rounded-xl border p-4 transition-colors ${
+                      ev.completed
+                        ? 'border-[#E6EFE9] bg-[#F8FAF8] opacity-80'
+                        : 'border-[#E5DFD2] bg-[#FAF8F4]'
+                    }`}
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${catMeta.badgeClass}`}
+                          >
+                            {renderCategoryIcon(ev.category)}
+                            <span>{catMeta.label}</span>
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#5C3D2E]">
+                            <CalendarDays className="h-3.5 w-3.5 text-[#C9A24D]" aria-hidden="true" />
+                            <span>{formatDateIndonesian(ev.date)}</span>
+                          </span>
+                          {ev.time && (
+                            <span className="inline-flex items-center gap-1 text-xs text-[#5E6D64]">
+                              <Clock className="h-3 w-3" aria-hidden="true" />
+                              <span>{ev.time} WIT</span>
+                            </span>
+                          )}
+                        </div>
+
+                        <h4
+                          className={`mt-2 font-display text-sm sm:text-base font-bold ${
+                            ev.completed ? 'line-through text-[#5E6D64]' : 'text-[#16241D]'
+                          }`}
+                        >
+                          {ev.title}
+                        </h4>
+
+                        {ev.location && (
+                          <p className="mt-1 flex items-center gap-1.5 text-xs text-[#425249]">
+                            <MapPin className="h-3.5 w-3.5 shrink-0 text-[#1D4A27]" aria-hidden="true" />
+                            <span>{ev.location}</span>
+                          </p>
+                        )}
+
+                        {ev.notes && (
+                          <p className="mt-1.5 text-xs leading-relaxed text-[#425249]">
+                            {ev.notes}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-1.5 shrink-0">
+                        {!ev.completed && (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              if (notifPermission !== 'granted') {
+                                await handleToggleBrowserReminders();
+                              } else {
+                                const ok = sendBrowserReminder(ev, true);
+                                if (ok) {
+                                  setNotifStatusBanner(
+                                    `Pengingat untuk "${ev.title}" dikirim ke notifikasi browser.`,
+                                  );
+                                }
+                              }
+                            }}
+                            aria-label={`Kirim pengingat notifikasi untuk ${ev.title}`}
+                            className="inline-flex min-h-[34px] items-center gap-1 rounded-lg border border-[#DFD8CA] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#5C3D2E] transition-colors hover:border-[#C9A24D] hover:bg-[#FAF4E4] cursor-pointer"
+                          >
+                            <Bell className="h-3 w-3 text-[#C9A24D]" aria-hidden="true" />
+                            <span>Ingatkan</span>
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onAskAI(
+                              `Bantu keluarga kami menyiapkan "${ev.title}" (${catMeta.label}) pada ${formatDateIndonesian(
+                                ev.date,
+                              )}${ev.location ? ` di ${ev.location}` : ''}. Berikan saran doa singkat, sikap bijak keluarga, dan hal penting yang perlu disiapkan.`,
+                              catMeta.label,
+                            )
+                          }
+                          className="inline-flex min-h-[34px] items-center gap-1 rounded-lg border border-[#1D4A27] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#1D4A27] transition-colors hover:bg-[#1D4A27] hover:text-white cursor-pointer"
+                        >
+                          <Sparkles className="h-3 w-3" aria-hidden="true" />
+                          <span>Saran AI</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleToggleCompleted(ev.id)}
+                          aria-label={ev.completed ? 'Tandai belum selesai' : 'Tandai selesai'}
+                          className={`inline-flex min-h-[34px] items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors cursor-pointer ${
+                            ev.completed
+                              ? 'border-[#1D4A27] bg-[#1D4A27] text-white'
+                              : 'border-[#DFD8CA] bg-white text-[#425249] hover:border-[#1D4A27]'
+                          }`}
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                          <span>{ev.completed ? 'Selesai' : 'Tandai'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteEvent(ev.id)}
+                          aria-label={`Hapus acara ${ev.title}`}
+                          className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-lg border border-[#DFD8CA] bg-white text-[#8C3B2B] transition-colors hover:border-[#8C3B2B] hover:bg-[#FDF6F3] cursor-pointer"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function App() {
   const [activeNav, setActiveNav] = useState<
     | 'beranda'
@@ -735,8 +1871,10 @@ export default function App() {
   const [externalPrompt, setExternalPrompt] = useState<{
     text: string;
     topic?: string;
+    mode?: 'chat' | 'image';
     nonce: number;
   } | null>(null);
+  const [openWorkspaceNonce, setOpenWorkspaceNonce] = useState<number>(0);
 
   const chatInputRef = useRef<HTMLInputElement | null>(null);
   const heroChatRef = useRef<HTMLDivElement | null>(null);
@@ -790,9 +1928,17 @@ export default function App() {
     }
   };
 
-  const handleAskAI = (promptText: string, topic?: string) => {
+  const handleAskAI = (
+    promptText: string,
+    topic?: string,
+    mode: 'chat' | 'image' = 'chat',
+  ) => {
     scrollToChat(false);
-    setExternalPrompt({text: promptText, topic, nonce: Date.now()});
+    setExternalPrompt({text: promptText, topic, mode, nonce: Date.now()});
+  };
+
+  const handleOpenAIWorkspace = () => {
+    setOpenWorkspaceNonce(Date.now());
   };
 
   const handleSelectFeatureCard = (cardId: HubCategoryId) => {
@@ -923,6 +2069,17 @@ export default function App() {
           document.getElementById('delapan-pilar-parenting')?.scrollIntoView({behavior: 'smooth', block: 'start'});
         },
       })),
+      {
+        id: 'parenting-dewasa-muda-tips',
+        category: 'Parenting' as const,
+        title: 'Tips Praktis Dewasa Muda (18+): Ekonomi, Kerja & Perkawinan',
+        subtitle:
+          'Kartu panduan kemandirian ekonomi keluarga, persiapan dunia kerja, dan kesiapan perkawinan.',
+        keywords: 'dewasa muda 18+ kemandirian ekonomi kerja perkawinan mas kawin tabungan dana darurat',
+        onSelect: () => {
+          document.getElementById('tips-dewasa-muda')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
       ...ANCESTRAL_TALES.map((tale, idx) => ({
         id: `tale-${tale.id}`,
         category: 'Dongeng Leluhur' as const,
@@ -965,6 +2122,26 @@ export default function App() {
         keywords: 'galeri papua foto kisah tanah papua honai pesisir upacara adat',
         onSelect: () => {
           document.getElementById('galeri-papua')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
+      {
+        id: 'app-kalender-keluarga',
+        category: 'Topik Konsultasi' as const,
+        title: 'Kalender Keluarga Papua — Jadwal Adat, Komunitas & Sekolah',
+        subtitle: 'Catat upacara adat, pertemuan komunitas, dan momen penting sekolah anak.',
+        keywords: 'kalender keluarga jadwal acara upacara adat pertemuan komunitas sekolah rapor anak',
+        onSelect: () => {
+          document.getElementById('kalender-keluarga')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        },
+      },
+      {
+        id: 'app-buku-panduan',
+        category: 'Artikel & Gizi' as const,
+        title: 'Buku Panduan Keluarga Papua (Unduh PDF & E-Book)',
+        subtitle: 'Unduh buku panduan lengkap 6 bab berisi adat, parenting, gizi lokal, dan panduan AI.',
+        keywords: 'buku panduan ebook pdf download unduh manual keluarga parenting adat gizi papua',
+        onSelect: () => {
+          document.getElementById('buku-panduan')?.scrollIntoView({behavior: 'smooth', block: 'start'});
         },
       },
       {
@@ -1518,6 +2695,14 @@ export default function App() {
                     <span>Mulai Konsultasi Keluarga</span>
                     <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
                   </button>
+                  <button
+                    type="button"
+                    onClick={handleOpenAIWorkspace}
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-[#F2C22B]/60 bg-[#12301B]/85 px-5 py-3 text-xs font-semibold text-[#F2C22B] backdrop-blur-xs transition-colors hover:bg-[#1E4A29] whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <Sparkles className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+                    <span>Buka Ruang AI Lengkap</span>
+                  </button>
                   <HeaderInstallButton className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/35 bg-[#12301B]/80 px-5 py-3 text-xs font-semibold text-white backdrop-blur-xs transition-colors hover:border-[#F2C22B] hover:text-[#F2C22B] whitespace-nowrap shrink-0 cursor-pointer" />
                 </div>
               </div>
@@ -1530,6 +2715,7 @@ export default function App() {
               >
                 <ChatAssistant
                   externalPrompt={externalPrompt}
+                  openWorkspaceNonce={openWorkspaceNonce}
                   inputRef={chatInputRef}
                   userProfile={userProfile}
                 />
@@ -1976,7 +3162,73 @@ export default function App() {
               </div>
             </div>
 
-            {/* 3. Fitur Tanya Sahabat AI (Pusat Interaksi Parenting) */}
+            {/* 3. Tips Parenting Praktis Usia Dewasa Muda (18+ Tahun) */}
+            <div
+              id="tips-dewasa-muda"
+              className="rounded-2xl border border-[#DFD8CA] bg-white p-5 sm:p-7 shadow-xs"
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FAF4E4] px-3 py-0.5 text-[11px] font-bold uppercase tracking-wider text-[#5C3D2E]">
+                    <GraduationCap className="h-3.5 w-3.5 text-[#1D4A27]" aria-hidden="true" />
+                    <span>Fokus Usia 18 Tahun ke Atas</span>
+                  </span>
+                  <h3 className="mt-1.5 font-display text-base sm:text-lg font-bold text-[#16241D]">
+                    3. Tips Parenting Praktis Dewasa Muda (18+): Kemandirian Ekonomi, Kerja &amp; Perkawinan
+                  </h3>
+                  <p className="mt-1 text-xs sm:text-sm text-[#425249]">
+                    Klik salah satu kartu di bawah untuk langsung berdiskusi dan meminta panduan nyata dari Sahabat Keluarga Papua AI.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+                {YOUNG_ADULT_PRACTICAL_TIPS.map((tip) => {
+                  const TipIcon = tip.icon;
+                  return (
+                    <button
+                      key={tip.id}
+                      type="button"
+                      onClick={() => handleAskAI(tip.aiPrompt, tip.topic)}
+                      className="group flex flex-col justify-between rounded-2xl border border-[#E2DCCF] bg-[#FAF8F4] p-4 sm:p-5 text-left transition-all hover:border-[#1D4A27] hover:bg-white hover:shadow-sm cursor-pointer"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <div
+                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${tip.accentBg} ${tip.accentText} transition-colors group-hover:bg-[#1D4A27] group-hover:text-[#F2C22B]`}
+                          >
+                            <TipIcon className="h-5 w-5" strokeWidth={1.85} aria-hidden="true" />
+                          </div>
+                          <span className="rounded-full border border-[#E5DFD2] bg-white px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#5C3D2E]">
+                            {tip.badge}
+                          </span>
+                        </div>
+
+                        <h4 className="mt-3.5 font-display text-sm sm:text-base font-bold text-[#16241D] group-hover:text-[#1D4A27]">
+                          {tip.title}
+                        </h4>
+                        <p className="mt-1.5 text-xs leading-relaxed text-[#425249]">
+                          {tip.summary}
+                        </p>
+                      </div>
+
+                      <div className="mt-4 flex items-center justify-between border-t border-[#EAE4D8] pt-3 text-xs font-semibold text-[#1D4A27]">
+                        <span className="inline-flex items-center gap-1.5">
+                          <Sparkles className="h-3.5 w-3.5 text-[#C9A24D]" aria-hidden="true" />
+                          <span>Tanya Sahabat AI</span>
+                        </span>
+                        <ArrowRight
+                          className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 4. Fitur Tanya Sahabat AI (Pusat Interaksi Parenting) */}
             <div className="rounded-2xl border border-[#DFD8CA] bg-white p-5 sm:p-7 shadow-xs">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
@@ -1984,7 +3236,7 @@ export default function App() {
                     Pusat Interaksi Parenting
                   </span>
                   <h3 className="mt-0.5 font-display text-base sm:text-lg font-bold text-[#16241D]">
-                    3. Fitur Tanya Sahabat AI
+                    4. Fitur Tanya Sahabat AI
                   </h3>
                   <p className="mt-1 text-xs sm:text-sm text-[#425249]">
                     Pilih kelompok usia anak lalu klik pertanyaan di bawah untuk langsung berkonsultasi dengan Sahabat Keluarga Papua AI.
@@ -2499,11 +3751,33 @@ export default function App() {
                     <span>Minta Dongeng Baru dari AI</span>
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleOpenAIWorkspace();
+                      handleAskAI(
+                        `Ilustrasi dongeng Papua "${activeTale.title}": suasana alam Papua yang hangat, penuh kebersamaan dan pesan moral leluhur.`,
+                        'Dongeng Leluhur',
+                        'image',
+                      );
+                    }}
+                    className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full border border-[#8C3B2B] bg-[#FDF6F3] px-5 py-2 text-xs font-semibold text-[#8C3B2B] transition-colors hover:bg-[#8C3B2B] hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>Lukis Ilustrasi Dongeng (AI)</span>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Section Baru: Kalender Keluarga Papua */}
+        <KalenderKeluargaPapua onAskAI={(promptText, topic) => handleAskAI(promptText, topic)} />
+
+        {/* Section Baru: Buku Panduan Keluarga Papua (Unduh PDF / Offline HTML) */}
+        <GuidebookSection onAskAI={(promptText, topic) => handleAskAI(promptText, topic)} />
 
         {/* Section Baru: Cara Konsultasi */}
         <section
@@ -2523,14 +3797,24 @@ export default function App() {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={() => scrollToChat(true)}
-              className="inline-flex min-h-[42px] items-center justify-center gap-2 self-start rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              <span>Coba Konsultasi Sekarang</span>
-              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </button>
+            <div className="flex flex-wrap items-center gap-2.5 self-start">
+              <button
+                type="button"
+                onClick={handleOpenAIWorkspace}
+                className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full border border-[#1D4A27] bg-white px-5 py-2 text-xs font-semibold text-[#1D4A27] transition-colors hover:bg-[#1D4A27] hover:text-white whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Buka Ruang AI (Suara &amp; Gambar)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToChat(true)}
+                className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-full bg-[#1D4A27] px-5 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#265D33] whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <span>Coba Konsultasi Sekarang</span>
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            </div>
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

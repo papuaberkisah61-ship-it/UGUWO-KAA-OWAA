@@ -244,6 +244,95 @@ async function startServer() {
     }
   });
 
+  const sanitizeSvgMarkup = (rawSvg: string): string => {
+    const svgMatch = rawSvg.match(/<svg[\s\S]*?<\/svg>/i);
+    if (!svgMatch) return '';
+    let clean = svgMatch[0];
+    // Remove script, foreignObject, iframe, object, embed, and external image tags
+    clean = clean.replace(/<script[\s\S]*?<\/script>/gi, '');
+    clean = clean.replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '');
+    clean = clean.replace(/<(iframe|object|embed|link|meta|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+    clean = clean.replace(/<(iframe|object|embed|link|meta|image)\b[^>]*\/?>/gi, '');
+    // Strip inline event handlers and javascript: URIs
+    clean = clean.replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '');
+    clean = clean.replace(/(?:href|xlink:href)\s*=\s*(?:"[^"]*"|'[^']*')/gi, (attr) =>
+      attr.toLowerCase().includes('#') && !attr.toLowerCase().includes('javascript:') ? attr : '',
+    );
+    // Normalize opening <svg> tag dimensions cleanly
+    clean = clean.replace(/<svg\b([^>]*)>/i, (_full, attrs: string) => {
+      const hasViewBox = /viewBox=/i.test(attrs);
+      const cleanedAttrs = attrs
+        .replace(/\bxmlns\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+        .replace(/\bwidth\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+        .replace(/\bheight\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+        .trim();
+      return `<svg xmlns="http://www.w3.org/2000/svg" ${
+        hasViewBox ? '' : 'viewBox="0 0 640 400"'
+      } width="640" height="400" ${cleanedAttrs}>`;
+    });
+    return clean;
+  };
+
+  app.post('/api/generate-illustration', async (req: Request, res: Response) => {
+    const body = (req.body || {}) as {prompt?: string; topic?: string; style?: DialectStyle};
+    const prompt = typeof body.prompt === 'string' ? body.prompt.trim().slice(0, 600) : '';
+    const topic = typeof body.topic === 'string' ? body.topic.trim().slice(0, 80) : '';
+
+    if (!prompt) {
+      res.status(400).json({error: 'Tuliskan deskripsi gambar atau ilustrasi yang ingin dibuat.'});
+      return;
+    }
+
+    if (!process.env.GEMINI_API_KEY) {
+      res.status(500).json({
+        error:
+          'Kunci API Gemini belum dikonfigurasi di server. Silakan periksa panel Settings > Secrets.',
+      });
+      return;
+    }
+
+    try {
+      const result = await ai.models.generateContent({
+        model: 'gemini-3.1-flash-lite',
+        contents: `Buatkan ilustrasi seni vektor SVG modern, artistik, hangat, dan kaya detail bertema Papua dan keluarga untuk permintaan ini: "${prompt}"${
+          topic && topic !== 'Semua Topik' ? ` (Konteks topik: ${topic})` : ''
+        }.`,
+        config: {
+          systemInstruction:
+            'Anda adalah ilustrator seni vektor budaya Papua modern untuk platform UGUWO KAA OWAA. Jawab PERSIS dengan format 3 bagian berikut tanpa blok markdown:\nJUDUL: <judul singkat 2-6 kata>\nCAPTION: <deskripsi hangat 1 kalimat dialek Papua sopan>\n<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg">...</svg>\n\nAturan SVG: Gunakan palet elegan Papua (#1D4A27, #163B22, #2E6F40 hijau hutan; #F2C22B, #C9A24D emas hangat; #FAF8F4, #EFE4C8 krem; #5C3D2E, #8C5A3C kayu; #1D6A8A biru pesisir; #8C3B2B terakota). Sertakan <defs> linearGradient/radialGradient, latar pegunungan/danau/langit, dan 12-24 elemen bersih (<rect>, <circle>, <ellipse>, <path>, <polygon>, <g>) seperti Honai, Noken, Cenderawasih, perahu, atau keluarga. DILARANG <script>, <image>, atau event handler.',
+          thinkingConfig: {
+            thinkingLevel: ThinkingLevel.MINIMAL,
+          },
+        },
+      });
+
+      const rawText = (result.text || '').trim();
+      const titleMatch = rawText.match(/JUDUL:\s*(.+)/i);
+      const captionMatch = rawText.match(/CAPTION:\s*(.+)/i);
+      const safeSvg = sanitizeSvgMarkup(rawText);
+
+      if (!safeSvg) {
+        res.status(500).json({
+          error: 'Ilustrasi belum berhasil dibentuk. Coba ubah deskripsi singkatnya ya, kaka.',
+        });
+        return;
+      }
+
+      res.json({
+        title: (titleMatch?.[1]?.trim() || 'Ilustrasi Budaya Papua').slice(0, 90),
+        caption: (
+          captionMatch?.[1]?.trim() ||
+          'Ilustrasi hangat bertema keluarga dan budaya Tanah Papua.'
+        ).slice(0, 260),
+        svgMarkup: safeSvg,
+      });
+    } catch (err) {
+      console.error('Illustration generation error:', err);
+      const {status, error} = getFriendlyErrorMessage(err);
+      res.status(status).json({error});
+    }
+  });
+
   if (!IS_PROD) {
     const {createServer: createViteServer} = await import('vite');
     const vite = await createViteServer({
